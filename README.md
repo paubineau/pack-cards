@@ -20,7 +20,7 @@ demand. You own the card data, navigation, branding,
 persistence, and export content.
 
 [Installation](#installation) · [Quick start](#quick-start) ·
-[API](#core-api) · [Appearance](#appearance-and-styling) ·
+[Examples](examples/README.md) · [API](#core-api) · [Appearance](#appearance-and-styling) ·
 [Optional modules](#optional-modules) · [Development](#development)
 
 ## Installation
@@ -133,8 +133,11 @@ that step. `onOpen` can return a promise when you need
 to load content; mount the card with the unchanged `arrival` value before that
 promise resolves. Keep the handoff order shown above when disposing the pack.
 
-For a full collection with previous/next buttons, see the
-[standalone demo](examples/index.html) and its [source](examples/demo.js).
+For a minimal runnable integration, see the [starter example](examples/minimal.html)
+and its [source](examples/minimal.js). The [interactive showcase](examples/index.html)
+covers pack settings, viewed-card piles, live material editing, snapshots, dragging,
+and PNG/GIF export. Each section links to its own source; see the
+[example guide](examples/README.md) for the module map and ownership notes.
 
 ### Frameworks, cleanup, and serving assets
 
@@ -479,20 +482,26 @@ npm run test:browser
 
 These exercise actual WebGL, pointer/keyboard opening, spring-back, fallback
 paths, artwork updates, cleanup, visibility changes, and the first-card handoff.
+The example checks also exercise the served showcase, editor, piles, snapshots,
+PNG/GIF export, and starter integration.
 The renderer uses maintained source in [`renderer/`](renderer/README.md), with
 separate shaders, physics, textures, and a DOM lifecycle. The presentation facade
 delegates internally to artwork, pack, flight, deck, and motion modules in
 `presentation/`; those internal files are not additional public APIs.
 
-To try the demo, serve
-the repository with any local HTTP server, for example with Python installed:
+To try the examples, start the included local server (no dependency install or
+build is needed):
 
 ```sh
-python -m http.server 8080 --bind 127.0.0.1
+npm run demo
+# Choose another port if needed:
+npm run demo -- --port 8081
 ```
 
-Open `http://127.0.0.1:8080/examples/` for a six-card collection with opening,
-navigation, materials, and motion controls.
+Open `http://127.0.0.1:8080/examples/` for the feature showcase, or
+`http://127.0.0.1:8080/examples/minimal.html` for the starter. The server binds
+only to the local machine and sends the JavaScript MIME types needed by module
+workers. Another static server works too if it serves `.js` and `.mjs` as JavaScript.
 
 The renderer is checked in and ready to use. Rebuild it only when changing its
 source or dependencies:

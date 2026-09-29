@@ -3,60 +3,118 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pack Cards — standalone example</title>
+  <meta name="description" content="Interactive Pack Cards examples: pack opening, materials, appearance editing, card piles, snapshots and export.">
+  <title>Pack Cards — interactive examples</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="../styles.css">
-  <style>
-    :root { color-scheme: dark; font: 16px/1.5 system-ui, sans-serif; color: #edf1f8; background: #0c1018; }
-    * { box-sizing: border-box; }
-    body { margin: 0; padding: 24px; }
-    main { max-width: 980px; margin: auto; }
-    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 4vw, 2.3rem); }
-    p { margin: 0 0 16px; }
-    .intro { color: #a4afc0; max-width: 65ch; }
-    .controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin: 24px 0; }
-    label { display: grid; gap: 4px; font-size: .85rem; }
-    button, select { font: inherit; border: 1px solid #354056; border-radius: 8px; padding: 9px 14px; background: #192232; color: #edf1f8; }
-    button { cursor: pointer; }
-    button:disabled { opacity: .5; cursor: default; }
-    :focus-visible { outline: 2px solid #9dd8dc; outline-offset: 4px; }
-    #stage { min-height: 700px; background: radial-gradient(ellipse at center, #20363c, #101824 70%); border: 1px solid #293345; border-radius: 20px; padding: 24px; }
-    #navigation { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 16px 0; }
-    #navigation[hidden] { display: none; }
-    #status { min-height: 24px; text-align: center; color: #a4afc0; }
-    .demo-card { display: flex; flex-direction: column; color: #edf1f8; }
-    .demo-card .recap-card-content { text-align: center; }
-    .demo-symbol { font-size: 5rem; line-height: 1.2; color: var(--accent); }
-    .demo-card h2 { font-size: 1.75rem; margin: 0; }
-    .demo-card p { margin: 0; }
-    .demo-card .recap-card-footer { padding-top: 18px; margin-top: auto; }
-    @media (max-width: 600px) { body { padding: 16px; } #stage { padding: 12px; min-height: 610px; } }
-  </style>
+  <link rel="stylesheet" href="../editor.css">
+  <link rel="stylesheet" href="../snapshots.css">
+  <link rel="stylesheet" href="./demo.css">
   <script type="module" src="./demo.js"></script>
+  <script type="module" src="./materials-demo.js"></script>
+  <script type="module" src="./tools-demo.js"></script>
+  <script type="module" src="./export-demo.js"></script>
 </head>
 <body>
+  <a class="skip-link" href="#packs">Skip to examples</a>
+  <header class="site-header">
+    <a class="brand" href="./"><span aria-hidden="true">◇</span> pack-cards <span class="tag">EXAMPLES</span></a>
+    <nav aria-label="Resources"><a href="./minimal.html">Starter example ↗</a><a href="https://github.com/paubineau/pack-cards">GitHub ↗</a></nav>
+  </header>
   <main>
-    <h1>Your cards. Your collection.</h1>
-    <p class="intro">A standalone browser example using six fictional cards. Open the pack, move your pointer over a card, or swipe sideways to explore its materials. Reduced-motion preferences are respected automatically.</p>
-    <div class="controls">
-      <label>Motion
-        <select id="motion"><option value="interactive">Interactive</option><option value="still">Still</option></select>
-      </label>
-      <label>Opening
-        <select id="opening"><option value="animated">Animated</option><option value="instant">Instant</option></select>
-      </label>
-      <label>Pack size
-        <select id="zoom"><option value="true">Compact</option><option value="false">Card size</option></select>
-      </label>
-      <button id="open" type="button">Open pack</button>
-      <button id="reset" type="button">Reset collection</button>
+    <div class="intro">
+      <p class="eyebrow">YOUR CONTENT. A LITTLE COLLECTIBLE MAGIC.</p>
+      <h1>Explore Pack Cards.</h1>
+      <p class="lede">Tear open a pack. Catch the light. Make it yours.<br>A hands-on guide to the library, using six fictional cards.</p>
+      <div class="intro-meta"><span><i aria-hidden="true"></i> Plain JavaScript</span><span>No framework runtime</span><span>No backend</span></div>
     </div>
-    <div id="stage" class="pack-cards"></div>
-    <nav id="navigation" aria-label="Cards" hidden>
-      <button id="previous" type="button">Previous</button>
-      <span id="position"></span>
-      <button id="next" type="button">Next</button>
+    <nav class="section-nav" aria-label="Examples">
+      <a href="#packs"><span>01</span> Packs &amp; piles</a><a href="#materials"><span>02</span> Material studio</a><a href="#snapshots"><span>03</span> Snapshots &amp; dragging</a><a href="#exports"><span>04</span> Canvas &amp; GIF</a>
     </nav>
-    <p id="status" role="status" aria-live="polite"></p>
+    <section id="packs" aria-labelledby="packs-title">
+      <div class="section-heading"><div><p class="eyebrow">01 / CORE + COLLECTION</p><h2 id="packs-title">Open, reveal, collect.</h2></div><a class="source-link" href="./demo.js">View example source ↗</a></div>
+      <p class="section-description">Drag across the wrapper to tear it, or use the opening button. Reveal the first card, then navigate with the buttons or a sideways swipe. Viewed cards land in the pile below.</p>
+      <div class="playground-layout">
+        <div class="preview-surface pack-preview">
+          <div class="surface-label"><span>FIELD NOTES / SIX CARDS</span><span id="motion-note">Respects reduced motion</span></div>
+          <div id="stage" class="pack-cards"></div>
+          <nav id="navigation" class="card-navigation" aria-label="Cards" hidden><button id="previous" class="button" type="button">← Previous</button><span id="position"></span><button id="next" class="button" type="button">Next →</button></nav>
+          <div class="pile-row"><div id="pile-slot" class="pack-cards"></div><p id="pile-caption">Your viewed cards will collect here.</p></div>
+          <p id="status" class="status" role="status"></p>
+        </div>
+        <aside class="control-panel" aria-label="Pack configuration">
+          <h3>Try a different opening</h3><p class="help">Changing a control starts a fresh pack.</p>
+          <div class="control-grid">
+            <label>Opening<select id="opening"><option value="animated">Animated tear</option><option value="instant">Instant</option></select></label>
+            <label>First card<select id="reveal"><option value="manual">Click to reveal</option><option value="auto">Reveal automatically</option></select></label>
+            <label>Motion<select id="motion"><option value="interactive">Interactive tilt</option><option value="still">Still</option></select></label>
+            <label>Pack size<select id="zoom"><option value="true">Compact</option><option value="false">Card size</option></select></label>
+            <label>Wrapper stack<select id="pack-count"><option value="1">One pack</option><option value="3" selected>Three packs</option><option value="5">Five packs</option></select></label>
+            <label>Glow<select id="glow"><option value="bronze">Bronze</option><option value="silver">Silver</option><option value="gold" selected>Gold</option><option value="platinum">Platinum</option><option value="diamond">Diamond</option><option value="random">Random</option></select></label>
+          </div>
+          <label class="check-label"><input id="mystery" type="checkbox"> Mystery recipient</label>
+          <label class="wide-control">Renderer<select id="renderer-mode"><option value="webgl">Automatic WebGL</option><option value="fallback">Simulate unavailable renderer</option></select></label>
+          <div class="button-row"><button id="open" class="button primary" type="button">Open pack</button><button id="reset" class="button" type="button">Restart</button></div>
+          <p class="help">Still disables card tilt. Your system’s reduced-motion preference also limits opening and dealing animations.</p>
+          <div class="event-panel"><h4>Lifecycle events</h4><ol id="events" class="event-list"><li>Waiting for interaction</li></ol></div>
+          <details><summary>Current configuration</summary><pre id="pack-config"></pre></details>
+        </aside>
+      </div>
+      <details class="recipe"><summary>How this example works</summary><div class="recipe-content"><p>The example owns the six cards, navigation index, and viewed sizes. <code>createPackCards</code> handles presentation; <code>createCardPile</code> handles the pile and dealing. Snapshots carry the outgoing card’s materials into the animation.</p><pre><code>import {createPackCards} from 'pack-cards';
+import {createCardPile} from 'pack-cards/collection';
+import {snapshotCard} from 'pack-cards/snapshots';
+import 'pack-cards/styles.css';</code></pre><p>For the smallest complete integration, start with <a href="./minimal.html">the starter example</a>. The full source shows cleanup and the pack-to-card handoff.</p></div></details>
+    </section>
+    <section id="materials" aria-labelledby="materials-title">
+      <div class="section-heading"><div><p class="eyebrow">02 / APPEARANCE + EDITOR</p><h2 id="materials-title">Find your finish.</h2></div><a class="source-link" href="./materials-demo.js">View example source ↗</a></div>
+      <p class="section-description">Explore stock, coating, foil, engraving, and reflective print. Each rarity has its own profile. Select multiple allowed values to let the library assign materials deterministically across a collection.</p>
+      <div class="materials-layout">
+        <div class="material-preview">
+          <div class="preview-surface"><div class="surface-label">LIVE MATERIAL PREVIEW</div><div id="material-stage" class="pack-cards"></div><p id="material-status" class="status" role="status"></p></div>
+          <div class="button-row"><label>Preview profile<select id="material-rarity"></select></label><button id="material-reset" class="button" type="button">Reset all profiles</button></div>
+          <details><summary>Settings you can use in your app</summary><pre id="editor-settings"></pre></details>
+        </div>
+        <div class="control-panel"><div id="editor-controls"></div><p class="help">This preview has no persistence. Global opening, glow, and zoom settings apply when you use these settings to mount a pack.</p></div>
+      </div>
+      <details class="recipe"><summary>Use the editor independently</summary><div class="recipe-content"><pre><code>import {createAppearanceEditor} from 'pack-cards/editor';
+import 'pack-cards/editor.css';
+
+const editor = createAppearanceEditor(host, {
+  initial: settings,
+  onChange: (settings, target) =&gt; updatePreview(settings, target),
+});
+// Your app owns saving. Call editor.dispose() on unmount.</code></pre><p>You can also provide your own controls using the appearance helpers. Import <code>pack-cards/base.css</code> on its own to supply a custom card layout; <code>styles.css</code> adds the default content theme used here.</p></div></details>
+    </section>
+    <section id="snapshots" aria-labelledby="snapshots-title">
+      <div class="section-heading"><div><p class="eyebrow">03 / SNAPSHOTS</p><h2 id="snapshots-title">Take the finish with you.</h2></div><a class="source-link" href="./tools-demo.js">View example source ↗</a></div>
+      <p class="section-description">Make an inert visual copy that retains the card’s artwork and material. Drag from the handle into the tray, or use the copy button with a keyboard.</p>
+      <div class="snapshot-layout">
+        <div class="preview-surface"><div class="surface-label">INTERACTIVE ORIGINAL</div><div id="snapshot-source" class="pack-cards"></div><div class="button-row centered"><button id="drag-handle" class="button drag-handle" type="button">⠿ Drag a copy</button><button id="snapshot-capture" class="button primary" type="button">Copy to tray</button></div></div>
+        <div id="drop-zone" class="preview-surface drop-zone"><div class="surface-label">SNAPSHOT TRAY</div><div id="snapshot-copy" class="pack-cards"></div><p class="help">Drop here. The original stays interactive.</p></div>
+      </div>
+      <p id="snapshot-status" class="status" role="status">Ready to make a copy.</p>
+      <details class="recipe"><summary>What the helper owns</summary><div class="recipe-content"><pre><code>import {snapshotCard, createCardDragPreview} from 'pack-cards/snapshots';
+import 'pack-cards/snapshots.css';
+
+const copy = snapshotCard(face);
+tray.replaceChildren(copy);</code></pre><p>Snapshots preserve canvas pixels, scroll position, and material variables. They do not copy event listeners. The drag helper adds a sized visual preview; this example supplies pointer tracking and drop behavior. A snapshot is a DOM copy, not a PNG.</p></div></details>
+    </section>
+    <section id="exports" aria-labelledby="exports-title">
+      <div class="section-heading"><div><p class="eyebrow">04 / EXPORT MATERIAL + GIF WORKER</p><h2 id="exports-title">Beyond the browser card.</h2></div><a class="source-link" href="./export-demo.js">View example source ↗</a></div>
+      <p class="section-description">The library draws materials onto a canvas; your app composes the content. Download a still image or encode the six cards into a short loop in a dedicated worker.</p>
+      <div class="export-layout">
+        <div class="preview-surface canvas-preview"><div class="surface-label">CANVAS / 1080 × 1440</div><canvas id="export-canvas" width="1080" height="1440" role="img" aria-label="Export preview of the selected card"></canvas></div>
+        <div class="control-panel"><h3>Compose. Encode. Download.</h3><label>Canvas card<select id="export-card"></select></label><div class="button-row"><button id="export-png" class="button primary" type="button">Download PNG</button><button id="export-gif" class="button" type="button">Create six-card GIF</button><button id="export-cancel" class="button" type="button" hidden>Cancel export</button></div><p class="help">PNG: 1080 × 1440. GIF: six 270 × 360 frames, 800 ms each. Everything is generated locally; nothing is uploaded.</p><p id="export-status" class="status" role="status"></p><img id="gif-preview" alt="Generated six-card GIF preview" hidden><a id="gif-download" class="button" download="field-notes.gif" hidden>Download GIF</a></div>
+      </div>
+      <details class="recipe"><summary>Materials and content are separate</summary><div class="recipe-content"><pre><code>import {createExportCard} from 'pack-cards/export-material';
+
+const frame = createExportCard(canvas, artwork, {appearance});
+// Draw your own text and artwork with frame.ctx.
+// This unbundled example serves the worker alongside the library:
+const worker = new Worker(new URL('../gif-worker.js', import.meta.url),
+  {type: 'module'});</code></pre><p>Canvas export does not capture arbitrary HTML. Reuse the resolved appearance from your card and draw your content. The runnable <a href="./export-demo.js">source</a> shows frame acknowledgements, cancellation, and worker cleanup.</p></div></details>
+    </section>
+    <footer class="site-footer"><p>Four independent examples. One library. No framework required.</p><div><a href="./minimal.html">Start small ↗</a><a href="./README.md">Example guide ↗</a><a href="https://github.com/paubineau/pack-cards#core-api">API reference ↗</a></div></footer>
   </main>
 </body>
 </html>
