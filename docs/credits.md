@@ -6,15 +6,50 @@
 the public repository does not currently grant an open-source license for that
 code.
 
-The WebGL tear is adapted from `cardpack-webgl` at revision
-`d3243641b53b2679902c9263554bfdcdef4e4c3d`. Its adapted source and MIT license live
-in [`renderer/`](../renderer/README.md); the distributed notice is in
-[THIRD_PARTY_LICENSES.txt](../THIRD_PARTY_LICENSES.txt). GIF encoding includes
-[gifenc 1.0.3](../vendor/gifenc/README.md) under its
-[MIT license](../vendor/gifenc/LICENSE.md). Keep these notices with redistributed
-third-party code.
+## Pack opening: 2manslkh
 
-Card CSS and SVG textures are local implementations informed by Simon Goellner's
-`pokemon-cards-css` (`acb1197633e749a1fba4412231db2f6581586d00`) and
-`pokemon-cards-151` (`98030f941cdc4919b648457200277e29b60d5f5a`), without copying
-their source or assets. The demo uses fictional cards and neutral artwork.
+The WebGL pack-opening renderer is directly adapted from
+**[cardpack-webgl](https://github.com/2manslkh/cardpack-webgl)** by
+[2manslkh](https://github.com/2manslkh), at revision
+[`d3243641b53b2679902c9263554bfdcdef4e4c3d`](https://github.com/2manslkh/cardpack-webgl/tree/d3243641b53b2679902c9263554bfdcdef4e4c3d).
+Its shaders, tear physics, textures, particles, and gesture timing form the
+foundation of the renderer in this library.
+
+Pack Cards maintains a framework-independent DOM lifecycle and integration
+changes around that foundation. The adapted source, modification notes, and
+upstream **MIT license** are in [`renderer/`](../renderer/README.md) and
+[`renderer/LICENSE`](../renderer/LICENSE). The distributed notice is in
+[THIRD_PARTY_LICENSES.txt](../THIRD_PARTY_LICENSES.txt).
+
+## Holographic cards: Simon Goellner
+
+The card materials and interaction are heavily inspired by the work of
+**[Simon Goellner (@simeydotme)](https://github.com/simeydotme)**:
+
+- **[pokemon-cards-css](https://github.com/simeydotme/pokemon-cards-css)** and its
+  [holographic card demo](https://poke-holo.simey.me/).
+  Reference revision:
+  [`acb1197633e749a1fba4412231db2f6581586d00`](https://github.com/simeydotme/pokemon-cards-css/tree/acb1197633e749a1fba4412231db2f6581586d00)
+  ([upstream GPL-3.0 license](https://github.com/simeydotme/pokemon-cards-css/blob/acb1197633e749a1fba4412231db2f6581586d00/LICENSE)).
+- **[pokemon-cards-151](https://github.com/simeydotme/pokemon-cards-151)** and its
+  [151 card demo](https://poke-151.simey.me/).
+  Reference revision:
+  [`98030f941cdc4919b648457200277e29b60d5f5a`](https://github.com/simeydotme/pokemon-cards-151/tree/98030f941cdc4919b648457200277e29b60d5f5a)
+  ([upstream GPL-3.0 license](https://github.com/simeydotme/pokemon-cards-151/blob/98030f941cdc4919b648457200277e29b60d5f5a/LICENSE)).
+
+Their card components, layered CSS, foil families, and pointer-responsive motion
+were substantial visual and technical references. The card CSS and SVG textures
+here were implemented locally without copying their source or assets; that does
+not diminish the influence of their work. The demo uses fictional cards and
+neutral artwork, with no Pokémon artwork or logos.
+
+Thank you to both authors and their contributors for publishing these projects.
+
+## GIF encoding
+
+GIF encoding includes **[gifenc](https://github.com/mattdesl/gifenc) by
+Matt DesLauriers**, version [1.0.3](../vendor/gifenc/README.md), under its
+[MIT license](../vendor/gifenc/LICENSE.md).
+
+Keep the applicable license and copyright notices with redistributed third-party
+code. These acknowledgements do not change the licenses of the upstream projects.

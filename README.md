@@ -15,6 +15,10 @@ WebGL pack renderer loads only when needed.
 
 Your app supplies card content, card order, navigation, and persistence.
 
+Pack Cards builds on **2manslkh's pack-opening renderer** and is heavily inspired
+by **Simon Goellner's (@simeydotme) holographic card work**. See
+[acknowledgements](#acknowledgements) for their projects and demos.
+
 ## Try it
 
 ```sh
@@ -131,6 +135,27 @@ Canvas exports draw content you supply; they do not capture arbitrary HTML.
 - [Optional modules](docs/optional-modules.md): editor, piles, snapshots, and exports.
 - [Examples](examples/README.md): runnable integrations and their source.
 - [Development](docs/development.md): testing, renderer builds, and packaging.
+
+## Acknowledgements
+
+The pack opening and card effects owe a great deal to these projects and their
+creators:
+
+- **[cardpack-webgl](https://github.com/2manslkh/cardpack-webgl) by
+  [2manslkh](https://github.com/2manslkh)** — the source foundation for the WebGL
+  pack-opening renderer, including its tear physics, shaders, and gesture timing.
+  Pack Cards adapts and maintains that code under its MIT license.
+- **[pokemon-cards-css](https://github.com/simeydotme/pokemon-cards-css) by
+  [Simon Goellner (@simeydotme)](https://github.com/simeydotme)** — a major visual
+  and technical inspiration for holographic materials, layered light effects,
+  and interactive card tilt. Explore the [original demo](https://poke-holo.simey.me/).
+- **[pokemon-cards-151](https://github.com/simeydotme/pokemon-cards-151), also by
+  Simon Goellner** — a further reference for foil treatments and card interaction.
+  Explore the [151 demo](https://poke-151.simey.me/).
+
+Thank you to these authors and their contributors for sharing the work that
+made this library possible. [License and credits](docs/credits.md) records the
+source revisions, adaptation details, and third-party notices.
 
 ## License
 
