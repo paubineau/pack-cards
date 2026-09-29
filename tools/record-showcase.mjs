@@ -110,6 +110,13 @@ const encoded = spawnSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y',
   '-movflags', '+faststart', resolve(output, 'showcase.mp4')], {stdio: 'inherit'});
 if (encoded.error) throw encoded.error;
 assert.equal(encoded.status, 0, 'FFmpeg must encode the showcase');
+const gif = spawnSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y',
+  '-i', resolve(output, 'showcase.mp4'), '-filter_complex',
+  'fps=12,scale=640:-1:flags=lanczos,split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle',
+  '-loop', '0', resolve(output, 'showcase.gif')], {stdio: 'inherit'});
+if (gif.error) throw gif.error;
+assert.equal(gif.status, 0, 'FFmpeg must encode the README preview');
 console.log(`Recorded the showcase at ${size.width}×${size.height}.`);
 console.log(`Video: ${resolve(output, 'showcase.mp4')}`);
+console.log(`README preview: ${resolve(output, 'showcase.gif')}`);
 console.log(`Original capture retained in: ${raw}`);
