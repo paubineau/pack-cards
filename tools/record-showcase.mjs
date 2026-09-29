@@ -46,8 +46,8 @@ async function sweep(points, milliseconds) {
 }
 
 try {
-  browser = await chromium.launch({headless: true,
-    args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader']});
+  // Full Chromium can use GPU acceleration; the headless shell forces software rendering here.
+  browser = await chromium.launch({headless: true, channel: 'chromium'});
   context = await browser.newContext({viewport: size, deviceScaleFactor: 1,
     reducedMotion: 'no-preference', recordVideo: {dir: raw, size}});
   page = await context.newPage();
@@ -112,7 +112,7 @@ if (encoded.error) throw encoded.error;
 assert.equal(encoded.status, 0, 'FFmpeg must encode the showcase');
 const gif = spawnSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y',
   '-i', resolve(output, 'showcase.mp4'), '-filter_complex',
-  'fps=12,scale=640:-1:flags=lanczos,split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle',
+  'fps=25,scale=432:-1:flags=lanczos,split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle',
   '-loop', '0', resolve(output, 'showcase.gif')], {stdio: 'inherit'});
 if (gif.error) throw gif.error;
 assert.equal(gif.status, 0, 'FFmpeg must encode the README preview');

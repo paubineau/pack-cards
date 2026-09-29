@@ -4,10 +4,14 @@ Collectible cards and interactive pack opening for the web. Give the library
 ordinary DOM elements for your card faces; it adds the wrapper, reveal animation,
 materials, and interaction.
 
-![Pack Cards: a pack opens, cards catch the light, and the legendary Sun joins the collection.](media/showcase.gif)
+<p align="center">
+  <img src="media/showcase.gif" width="432" alt="Pack Cards: a pack opens, cards catch the light, and the legendary Sun joins the collection.">
+</p>
 
-[Download the full-quality video](https://github.com/paubineau/pack-cards/raw/refs/heads/main/media/showcase.mp4) ·
-[Try the examples](#try-it).
+<p align="center">
+  <a href="https://github.com/paubineau/pack-cards/raw/refs/heads/main/media/showcase.mp4">Download the full-quality video</a> ·
+  <a href="#try-it">Try the examples</a>
+</p>
 
 **Plain JavaScript and CSS. No React or external runtime dependencies.** Works
 with a framework or without one, and includes TypeScript declarations. The
