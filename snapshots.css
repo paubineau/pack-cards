@@ -1,0 +1,4 @@
+/* Optional pointer preview. Position it using the returned grab offsets. */
+.pack-cards-drag-preview{position:fixed;left:0;top:0;z-index:1000;min-width:0;max-width:none;box-shadow:none;pointer-events:none}
+.pack-cards-drag-preview>.pack-cards-drag-face{position:absolute;animation:none;transition:none}
+.pack-cards-drag-face>.recap-collectible{box-shadow:inset 0 0 0 1px #ffffff24,0 26px 42px #0009;cursor:grabbing}

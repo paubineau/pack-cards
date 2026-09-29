@@ -9,6 +9,12 @@ import {createPackCards as createPresentation} from 'pack-cards/presentation';
 import {recapExportCard} from 'pack-cards/export-material';
 import {mountPack as mountRendererPack} from 'pack-cards/renderer';
 import 'pack-cards/styles.css';
+import {createCardPile} from 'pack-cards/collection';
+import {createAppearanceEditor} from 'pack-cards/editor';
+import {snapshotCard,createCardDragPreview} from 'pack-cards/snapshots';
+import {createGifEncoder} from 'pack-cards/gif';
+import 'pack-cards/editor.css';
+import 'pack-cards/snapshots.css';
 
 const settings: AppearanceSettings = normalizeAppearance({version: 5});
 settings.card.pattern = ['dots', 'facets'];
@@ -93,3 +99,19 @@ cards.mountCard(host, {appearance: {version: 5, motion: 'fast'}});
 // @ts-expect-error The renderer requires dimensions.
 mountRendererPack(host, {artSrc: '/pack.svg'});
 void choices;
+
+const pile=createCardPile({count:2,renderBack:()=>cards.renderBack('Collection',artwork)});
+pile.update(1,new Map([[0,{width:180,height:250}]]));
+pile.animate({container:host,direction:1,face:snapshotCard(canvas),bounds:canvas.getBoundingClientRect()})?.();
+pile.dispose();
+const editor=createAppearanceEditor(host,{initial:settings,labels:{choices:{stock:{paper:'Paper'}}},
+  onChange(value,target){settings.card=value.card;void target;}});
+editor.setSettings(editor.getSettings());editor.dispose();
+createCardDragPreview(host,1,2,{prepareClone(copy){copy.textContent='Preview';}}).dispose();
+const gif=createGifEncoder({repeat:0});
+gif.writeFrame({pixels:new Uint8ClampedArray(4),width:1,height:1,delay:100});
+const gifBytes:Uint8Array=gif.finish();void gifBytes;
+// @ts-expect-error GIF encoding requires typed RGBA pixels.
+gif.writeFrame({pixels:[0,0,0,255],width:1,height:1});
+// @ts-expect-error The collection only accepts forward or backward deals.
+pile.animate({container:host,direction:0,face:host,bounds:host.getBoundingClientRect()});

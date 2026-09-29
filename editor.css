@@ -1,0 +1,26 @@
+/* Optional appearance editor. Existing application colors can be inherited. */
+.pack-cards-editor{--editor-line:var(--pack-cards-editor-line,var(--line,#c6cbd2));--editor-text:var(--pack-cards-editor-text,var(--text,#18202b));--editor-muted:var(--pack-cards-editor-muted,var(--muted,#566271));--editor-accent:var(--pack-cards-editor-accent,var(--accent,#546de5));--editor-selected:var(--pack-cards-editor-selected,var(--accent-dark,#e9edff));color:var(--editor-text);min-width:0}
+.pack-cards-editor select{width:100%;min-width:0;font:inherit}
+.pack-cards-editor label{font-size:.74rem;line-height:1.4}
+.pack-cards-editor .fine{font-size:.75rem;line-height:1.55;margin:.65rem 0 1rem;color:var(--editor-muted)}
+.pack-cards-editor .appearance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.pack-cards-editor .appearance-component-group{border:0;border-top:1px solid var(--editor-line);margin:1rem 0 0;padding:1rem 0 0;min-width:0}
+.pack-cards-editor .appearance-component-group legend{padding-right:.7rem;color:var(--editor-muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+.pack-cards-editor .appearance-choice-set{grid-column:1/-1;min-width:0;border:0;padding:0;margin:.25rem 0 0}
+.pack-cards-editor .appearance-choice-set legend{padding:0;margin-bottom:.5rem;color:var(--editor-text);font-size:.74rem;text-transform:none;letter-spacing:normal}
+.pack-cards-editor .appearance-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.35rem}
+.pack-cards-editor .appearance-component-option{display:flex;align-items:center;gap:.45rem;min-height:42px;padding:.45rem .55rem;border:1px solid var(--editor-line);border-radius:7px;margin:0;cursor:pointer}
+.pack-cards-editor .appearance-component-option input{width:1rem;height:1rem;flex:none;margin:0;accent-color:var(--editor-accent)}
+.pack-cards-editor .appearance-component-option:has(input:checked){border-color:var(--editor-accent);background:var(--editor-selected)}
+.pack-cards-editor .appearance-component-option:has(input:focus-visible){outline:2px solid var(--editor-accent);outline-offset:2px}
+.pack-cards-editor .appearance-choice-set:disabled,.pack-cards-editor select:disabled{opacity:.5}
+.pack-cards-editor .appearance-choice-set:disabled .appearance-component-option,.pack-cards-editor select:disabled{cursor:not-allowed}
+.pack-cards-editor .appearance-choice-set .appearance-choice-help{font-size:.67rem;line-height:1.45;margin:.4rem 0 .15rem}
+.pack-cards-editor .appearance-pack-details{border-top:1px solid var(--editor-line);margin-top:1rem;padding-top:1rem}
+.pack-cards-editor .appearance-pack-details>summary{cursor:pointer;color:var(--editor-text);font-size:.86rem;font-weight:650;min-height:28px}
+.pack-cards-editor .appearance-pack-details .appearance-grid{margin-top:1rem}
+.pack-cards-editor .check-label{display:flex;gap:.5rem;margin-top:1rem;align-items:center}
+.pack-cards-editor .check-label input{width:1rem;height:1rem;flex:none}
+.pack-cards-editor .text-button{font:inherit;cursor:pointer}
+@media(max-width:700px){.pack-cards-editor .appearance-grid{gap:.7rem}}
+@media(max-width:390px){.pack-cards-editor .appearance-grid{grid-template-columns:minmax(0,1fr)}}

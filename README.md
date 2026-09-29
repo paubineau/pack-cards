@@ -149,11 +149,113 @@ methods must run in the browser. No application state is stored by the package.
 - Deterministic material choices per identity, balanced assortments per collection,
   six configurable rarity profiles and canvas rendering of the same materials.
 
-Collection progression, previously viewed-card piles, quiz/content rendering,
-ranking/drag-and-drop games, persistence, fetching, login and complete PNG/GIF
-story composition belong to the consumer. The original app retains those features
-and calls this package for presentation. The canvas module renders stock/materials
-and a configurable print frame, not arbitrary DOM screenshots.
+Optional modules provide viewed-card piles/dealing, an appearance editor, visual
+snapshots/drag previews and GIF encoding. Collection progression, quiz/content
+rendering, ranking/drop rules, persistence, fetching, login and complete PNG/GIF
+story composition belong to the consumer. The canvas module renders stock/materials
+and a configurable print frame; the consumer supplies its content.
+
+## Optional modules
+
+These modules have separate entry points and are not imported by the core.
+All have TypeScript declarations. Importing the modules is safe without a DOM;
+call editor, collection and snapshot methods after mounting a browser view.
+
+### Viewed-card piles and dealing
+
+```js
+import {createCardPile} from 'pack-cards/collection';
+import {snapshotCard} from 'pack-cards/snapshots';
+
+const pile=createCardPile({
+  count:10,
+  renderBack:()=>presentation.renderBack('Collection',artwork),
+  onPrevious:()=>navigate(-1),
+  previousLabel:position=>`Review card ${position}`
+});
+container.append(pile.element);
+pile.update(position,seen); // Map<card index, {width,height}>
+```
+
+The core stylesheet already includes pile and flight styles. `placements` holds
+stable poses; pass it into a new instance when restoring a collection. The host
+owns navigation, current position and content. Capture the old card's bounds and
+`snapshotCard(oldCard)` before a forward navigation; for backward navigation,
+capture the pile's old bounds with `pile.visual.getBoundingClientRect()` and use
+the newly mounted face. After updating the pile, `pile.animate({container,
+direction,face,bounds,origin,turn,deck,current,isActive,onFinish})` animates the
+transition. `direction` is `1` or `-1`; `origin` is used for backward deals.
+`turn`, `deck` and `current` refer to the mounted card's elements for temporary
+interaction/focus handling. It returns a cancellation function, or `null` when
+motion/layout/lifetime prevents animation. `dispose()` cancels the flight and
+removes the pile. Both cancellation paths restore hidden elements and release timers.
+
+### Appearance editor
+
+```js
+import {createAppearanceEditor} from 'pack-cards/editor';
+import 'pack-cards/editor.css';
+
+const editor=createAppearanceEditor(settingsHost,{
+  initial:settings,
+  labels:{target:'Appearance to edit',reset:'Reset'},
+  onChange:(settings,target)=>updatePreview(settings,target)
+});
+// Read settings on Save; the library makes no requests.
+const saved=editor.getSettings();
+editor.setSettings(saved); // Silent replacement.
+// On unmount: editor.dispose();
+```
+
+The editor covers material choices, six rarity profiles, reset/dependency rules,
+motion, opening, glow and zoom. Labels accept partial nested overrides; instances
+receive distinct accessible IDs by default. `showSettings:false` omits the global
+pack settings, or `sharedControls:{motion,opening,glow,pack_zoom}` can bind existing
+select/checkbox elements. `onChange` receives independent normalized settings.
+The app owns saving, access control and preview content. Disposal removes only
+generated controls and the editor's own handlers.
+
+### Snapshots and drag previews
+
+```js
+import {snapshotCard,createCardDragPreview} from 'pack-cards/snapshots';
+import 'pack-cards/snapshots.css';
+
+const copy=snapshotCard(face,{prepareClone:copy=>finishAnimatedText(copy)});
+container.append(copy);
+const drag=createCardDragPreview(face,event.clientX,event.clientY);
+container.append(drag.preview);
+drag.preview.style.transform=`translate(${event.clientX-drag.grabX}px,${event.clientY-drag.grabY}px)`;
+// On drop/cancel: drag.dispose();
+```
+
+Snapshots preserve canvas pixels, material variables and scroll position; they
+are inert, have no duplicate IDs and do not attach another foil controller.
+Insert them synchronously so detached scroll offsets can be restored in a
+microtask. Previews support reduced motion, sizing/class options and cleanup.
+The host retains pointer tracking, drop targets and game rules.
+
+### GIF encoding
+
+```js
+import {createGifEncoder} from 'pack-cards/gif';
+
+const gif=createGifEncoder({repeat:0}); // Loop forever; -1 disables looping.
+gif.writeFrame({pixels:rgba,width:1080,height:1440,delay:1500});
+const bytes=gif.finish();
+```
+
+Supply RGBA bytes as `Uint8Array`, `Uint8ClampedArray` or `ArrayBuffer`; all frames
+must have identical dimensions. Alpha below 128 is transparent, delay is in
+milliseconds (GIF uses 10 ms precision), and source buffers are not changed.
+Encoding is synchronous and also works in Node. For large browser exports, serve
+the resolvable `pack-cards/gif-worker.js` module with `gif.js` and its `vendor/`
+directory intact, or bundle it as a worker entry. The dedicated worker sends
+`{ready:true}` initially and after each frame; send frames as above, then
+`{finish:true}` to receive transferred `{bytes}`. Invalid messages return
+`{error:true}`. Create a new worker/encoder per export and terminate the worker
+on cancellation. The optional encoder includes gifenc 1.0.3; its MIT license and
+provenance ship in `vendor/gifenc/`.
 
 ## API
 
