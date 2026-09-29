@@ -1,8 +1,9 @@
 import {
-  appearanceDefaults, appearanceChoices, createPackCards, normalizeAppearance,
+  appearanceDefaults, appearanceChoices, createPackCards, createPackView, createAppearanceSettings, normalizeAppearance,
   resolveAppearance, resolveAppearances, createRarityAppearanceResolver,
   createExportCard, drawExportMaterial, drawExportStock,
-  type AppearanceSettings, type ResolvedAppearance, type Artwork, type PackCardsConfig
+  type AppearanceSettings, type ResolvedAppearance, type Artwork, type PackCardsConfig,
+  type AppearanceSettingsOptions, type PackView, type RenderedCard
 } from 'pack-cards';
 import {normalizeRecapProfile, recapProfileChoices, resolveRecapProfile,
   normalizeAppearance as normalizeFromModule, resolveAppearance as resolveFromModule,
@@ -54,6 +55,22 @@ const config: PackCardsConfig = {
 };
 const cards = createPackCards(config);
 const host = document.createElement('div');
+const overrides: AppearanceSettingsOptions = {motion: 'still', rarities: {rare: {foil: 'holographic'}}};
+const currentSettings: AppearanceSettings = createAppearanceSettings(overrides);
+const view: PackView = createPackView(host, {appearance: overrides, artwork, labels: {open: 'Discover'}});
+view.showCard(document.createElement('article'), {identity: 'orbit', rarity: 'rare', appearance: currentSettings});
+view.showPack({count: 2, renderCard: async (): Promise<RenderedCard> => ({face: document.createElement('article'),
+  identity: 'moon', rarity: 'epic', onNavigate(direction) { const step: 1 | -1 = direction; void step; }}),
+  onReveal(card) { card.face.focus(); }, onError(error) { void error; }});
+view.open(); view.dispose();
+// @ts-expect-error The managed pack requires a renderer returning a face.
+view.showPack({});
+// @ts-expect-error Managed rendering requires a DOM face, not raw HTML.
+view.showPack({renderCard: () => ({face: '<article>Card</article>'})});
+// @ts-expect-error The managed view owns the arrival handoff.
+view.showCard(host, {arrival: null});
+// @ts-expect-error Programmatic settings do not need a persisted schema version.
+createAppearanceSettings({version: 5});
 const pack = cards.mountPack(host, {
   artwork, appearance: {version: 5, card: {stock: 'metal'}},
   async onOpen(arrival) {

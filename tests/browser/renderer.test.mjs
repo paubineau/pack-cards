@@ -175,6 +175,7 @@ test('visibility changes pause rendering and preserve an operable tear', {timeou
 test('complete pack-to-card handoff still works after resize', {timeout: 25000}, async t => {
   const page = await pageFor(t);
   await page.goto(origin + '/library/examples/');
+  await page.locator('#reveal').selectOption('auto');
   await page.waitForSelector('.recap-pack-enhanced');
   await page.setViewportSize({width: 740, height: 850});
   await page.waitForTimeout(500);
@@ -182,9 +183,9 @@ test('complete pack-to-card handoff still works after resize', {timeout: 25000},
   await page.waitForFunction(() => document.getElementById('status').textContent.includes('The Seed'));
   await page.waitForSelector('.recap-pack-flight', {state: 'detached'});
   assert.equal(await page.locator('.recap-card-flight').count(), 0);
-  await page.getByRole('button', {name: 'Next', exact: true}).click();
+  await page.locator('#next').click();
   await page.waitForFunction(() => document.getElementById('status').textContent.includes('The Compass'));
-  await page.getByRole('button', {name: 'Reset collection', exact: true}).click();
+  await page.locator('#reset').click();
   await page.waitForSelector('.recap-pack-enhanced');
 });
 

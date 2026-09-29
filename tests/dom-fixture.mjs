@@ -38,6 +38,7 @@ export function installDOM(t, { reduced = false, installGlobals = true } = {}) {
       };
     }
     get isConnected() { return this === document.body || !!this.parentElement?.isConnected; }
+    get firstElementChild() { return this.children[0] || null; }
     get lastElementChild() { return this.children.at(-1) || null; }
     get classList() {
       return {

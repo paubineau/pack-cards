@@ -73,6 +73,9 @@ function normalizeRecapAppearance(value) {
   ]));
   return result;
 }
+function createAppearanceSettings(options={}) {
+  return normalizeRecapAppearance({version:5,...recapObject(options)});
+}
 function recapAppearanceHash(identity) {
   let hash=2166136261;
   for(const character of String(identity)) {hash^=character.codePointAt(0);hash=Math.imul(hash,16777619);}
@@ -178,6 +181,7 @@ export {
   recapProfileChoices,
   recapProfileComponentEnabled,
   normalizeRecapAppearance,
+  createAppearanceSettings,
   recapAppearanceHash,
   resolveRecapProfile,
   recapAppearanceTarget,

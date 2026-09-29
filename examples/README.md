@@ -1,6 +1,6 @@
 # Pack Cards examples
 
-Start with [minimal.html](./minimal.html) and [minimal.js](./minimal.js) for a complete pack-to-card integration. The HTML supplies one card's content, and the JavaScript mounts its wrapper, resolves a rarity appearance, hands off the opening animation, and releases each controller. It uses only the core entry point and `styles.css`, with a small inline page layout.
+Start with [minimal.html](./minimal.html) and [minimal.js](./minimal.js). Supply a card face and its rarity, then call `createPackView(...).showPack(...)`. The view handles the opening animation, appearance, replacement, and cleanup. The starter uses only the core entry point and `styles.css`.
 
 Open [index.html](./index.html) for the interactive feature showcase. Each section has controls, an observable result, and a link to its implementation. These examples use fictional content and public library APIs. They have no backend, account, database, or settings persistence.
 
@@ -18,14 +18,14 @@ Visit <http://127.0.0.1:8080/examples/> or <http://127.0.0.1:8080/examples/minim
 npm run demo -- --port 8081
 ```
 
-Serve the repository over HTTP. Opening the HTML through `file://` does not reliably support ES modules or the GIF worker. The examples consume the committed browser modules directly, so no frontend build or framework is required. When copying a starter into an installed-package project, replace the relative imports with the corresponding `pack-cards` package entry points and arrange for your bundler or server to serve the library styles and assets.
+Serve the repository over HTTP; `file://` does not reliably support ES modules or the GIF worker. No frontend build or framework is required. To copy an example into your app, follow the [installation and asset setup](../README.md).
 
 ## Find an integration
 
 | Source | What it demonstrates | Library entry points |
 | --- | --- | --- |
-| [minimal.js](./minimal.js) | One pack opening directly into one custom card; restart and cleanup | Core `index.js`, `styles.css` |
-| [demo.js](./demo.js) | Animated and instant opening, manual or automatic reveal, settings, renderer fallback, navigation, viewed-card piles and dealing | Core, `collection.js`, `snapshots.js` |
+| [minimal.js](./minimal.js) | Recommended starting point: a managed pack-to-card view, restart, and cleanup | Core `index.js`, `styles.css` |
+| [demo.js](./demo.js) | Advanced integration: manual controllers, reveal modes, renderer fallback, navigation, viewed-card piles, and dealing | Core, `collection.js`, `snapshots.js` |
 | [materials-demo.js](./materials-demo.js) | Live material editing, ordinary and rarity profiles, resolved appearance, normalized settings | Core, `editor.js`, `editor.css` |
 | [tools-demo.js](./tools-demo.js) | Inert snapshots, a pointer-driven drag preview, a keyboard-accessible copy action | Core, `snapshots.js`, `snapshots.css` |
 | [export-demo.js](./export-demo.js) | Consumer-composed canvas cards, PNG download, cancellable GIF encoding in a module worker | `appearance.js`, `export-material.js`, `gif-worker.js` |
@@ -34,16 +34,13 @@ Serve the repository over HTTP. Opening the HTML through `file://` does not reli
 
 The four showcase sections are independent: editing a material profile does not silently change the other examples. The material editor displays its normalized settings so you can pass them into your own pack or card. `styles.css` combines structural/material styles with the default content theme; consumers that provide their own content layout can use `base.css` instead.
 
-## Ownership and cleanup
+## Choose an integration level
 
-Your application owns card records, rendered front-face content, selection, navigation, saving, and export composition. The library owns the controllers you mount. Keep their disposers and call them when replacing the corresponding UI or unmounting a page.
+The starter uses `createPackView` for a single host element. Call `showPack` again to restart, or `showCard` to replace its content directly. Call `dispose` when the view leaves the page. A disposed view cannot be reused; the starter creates a fresh one after a back/forward-cache restore.
 
-The starter deliberately shows two less obvious parts of the pack-to-card handoff:
+The showcase uses `createPackCards` and the collection module for direct control over pack, card, and pile controllers. This supports custom navigation and dealing sequences, with explicit animation handoff and disposal. See [integration and lifecycle](../docs/integration.md) when building this kind of flow.
 
-- `onOpen` may run synchronously for instant opening. Deferring the callback by one microtask lets `mountPack` return its disposer first.
-- Pass the received `arrival` object unchanged to `mountCard` before disposing the pack. This lets the new card claim the animation. A generation guard ignores callbacks queued before Restart or `pagehide`.
-
-For optional modules, also dispose pile and drag controllers, terminate GIF workers, and revoke object URLs when finished. The examples release work on `pagehide`; the starter remounts on a persisted `pageshow` after a back/forward-cache restore. These lifecycle details also apply to framework component unmounts.
+Your app owns card records, front-face content, navigation, saving, and export composition in either approach.
 
 ## Try the interactions
 
@@ -55,12 +52,10 @@ For optional modules, also dispose pile and drag controllers, terminate GIF work
 
 ## Snapshots, PNGs, and GIFs
 
-A `snapshotCard` result is an inert DOM copy. It preserves material variables, canvas pixels, and scroll positions, but does not copy event listeners. `createCardDragPreview` provides that appearance in a sized preview; your app supplies pointer tracking and drop behavior. Neither helper captures arbitrary HTML as an image.
+A snapshot is an inert DOM copy that preserves the card's appearance. The drag preview adds a sized wrapper; the example supplies pointer tracking and drop behavior. Neither helper captures arbitrary HTML as an image.
 
-Canvas export is separate: `createExportCard` draws the stock and material frame, and the example draws its own symbols, headings, and captions with the canvas context. The PNG download is 1080 × 1440 pixels. If you supply remote images, they must be decoded and permit canvas access through CORS before export.
+The export example composes cards on a canvas, using `createExportCard` for the stock and material frame and ordinary canvas drawing for content. It downloads a 1080 × 1440 PNG or encodes six 270 × 360 frames as a GIF in a worker. The GIF is a slideshow of supplied frames, not a recording of the interactive pack.
 
-The GIF example composes six 270 × 360 frames at 800 ms per card and encodes them in a dedicated worker. It sends one frame per acknowledgement to bound pending frame data, supports cancellation, and terminates the worker afterward. This is a slideshow of supplied frames, not a recording of the interactive WebGL pack or DOM animations.
-
-GIF encoding reduces each frame to a limited palette and has one-bit transparency: alpha below 128 is transparent. Frame dimensions must match, and delays are rounded to GIF's 10 ms precision. Larger frames or longer sequences cost more memory and encoding time. The synchronous `createGifEncoder` entry point is also available when your own environment already manages background work; the example uses the worker to keep the page responsive.
+See [optional modules](../docs/optional-modules.md) for snapshot, editor, export, and worker APIs, including their constraints and cleanup requirements.
 
 For installation, configuration, API signatures, and library licensing, see the [main README](../README.md).

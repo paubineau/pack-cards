@@ -92,6 +92,7 @@ export function mountRecapPack(context,container,r,channel,total,artwork,onOpen,
   function reveal() {
     if (finished || !valid()) return;
     notifyOpening();
+    if (!valid()) return;
     const arrival=!window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
       (scene.classList.contains('recap-pack-torn') || scene.classList.contains('recap-pack-opening'))
       ? stack.querySelector('.recap-pack-back')?.getBoundingClientRect() : null;
@@ -107,6 +108,7 @@ export function mountRecapPack(context,container,r,channel,total,artwork,onOpen,
   function showDeck() {
     if (finished || ready || !valid()) return;
     notifyOpening();
+    if (!valid()) return;
     // The caller mounts the actual deck in its final layout and owns its reveal flip.
     // A temporary ready deck here would send it through a different position and size.
     if (autoRevealFirst) { reveal(); return; }
@@ -148,7 +150,10 @@ export function mountRecapPack(context,container,r,channel,total,artwork,onOpen,
   pack.onclick=() => {
     if (pack.disabled || !active()) return;
     notifyOpening();
+    if (!active()) return;
     dismissPreview();
+    // Disabling a focused fallback button otherwise sends focus to the body.
+    if (scene.contains(document.activeElement)) { scene.tabIndex=-1; scene.focus({preventScroll:true}); }
     pack.disabled=true;
     stack.style.opacity='';
     clearMotion();

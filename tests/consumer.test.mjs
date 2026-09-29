@@ -15,6 +15,8 @@ const require=createRequire(import.meta.url);
 
 test('consumer entry points preserve named and compatibility exports without a DOM', () => {
   assert.equal(cards.createPackCards, presentation.createPackCards);
+  assert.equal(typeof cards.createPackView, 'function');
+  assert.equal(cards.createAppearanceSettings, appearance.createAppearanceSettings);
   assert.equal(cards.normalizeAppearance, appearance.normalizeRecapAppearance);
   assert.equal(cards.resolveAppearance, appearance.resolveRecapAppearance);
   assert.equal(cards.createExportCard, materials.recapExportCard);

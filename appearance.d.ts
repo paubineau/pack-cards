@@ -45,6 +45,8 @@ export interface AppearanceSettingsInput {
   card?: Partial<DeepReadonly<MaterialProfile>>;
   rarities?: Partial<Record<Rarity, Partial<DeepReadonly<MaterialProfile>>>>;
 }
+/** Current-schema overrides for creating settings in code, without a version field. */
+export type AppearanceSettingsOptions = Omit<AppearanceSettingsInput, 'version'>;
 export type ResolvedAppearance = Readonly<MaterialComponents & {
   _resolved: true;
   version: 5;
@@ -67,6 +69,8 @@ export const recapRarityAppearanceDefaults: DeepReadonly<Record<Rarity, Material
 export const recapAppearanceDefaults: DeepReadonly<AppearanceSettings>;
 export const recapAppearanceSettingChoices: {opening: Opening[]; glow: Glow[]; motion: Motion[]};
 export function normalizeRecapAppearance(value?: unknown): AppearanceSettings;
+/** Create independent current-version settings. Use normalizeAppearance to read saved settings. */
+export function createAppearanceSettings(options?: AppearanceSettingsOptions): AppearanceSettings;
 export function normalizeRecapProfile(value?: unknown, fallback?: DeepReadonly<MaterialProfile>): MaterialProfile;
 export function recapProfileChoices<K extends MaterialComponent>(value: unknown, key: K): MaterialComponents[K][];
 export function recapProfileComponentEnabled(value: unknown, key: MaterialComponent): boolean;

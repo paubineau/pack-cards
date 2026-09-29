@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Managed view contract fixture</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/library/styles.css">
+<style>
+  body { margin: 0; background: #101824; color: #edf1f8; }
+  #host { width: min(100%, 650px); min-height: 660px; margin: auto; }
+  #host .recap-deck { width: min(100%, 370px); }
+</style>
+<div id="host" class="pack-cards"></div>
+<script type="module">
+  import {createPackView} from '/library/index.js';
+  window.createPackView = createPackView;
+  window.createFace = title => {
+    const face = document.createElement('article');
+    face.setAttribute('aria-label', title);
+    const heading = document.createElement('h2');
+    heading.textContent = title;
+    face.append(heading);
+    return face;
+  };
+  window.createView = (host = document.getElementById('host')) => createPackView(host, {
+    label: 'Field notes', artwork: {accent: '#a8dbcb', tint: '#213b38'},
+  });
+  window.view = window.createView();
+  window.events = [];
+</script>
+</html>
