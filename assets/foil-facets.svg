@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="350" height="490" viewBox="0 0 350 490">
+  <!-- Original cut-foil planes: a stationary luminance mask, with a quiet centre. -->
+  <defs>
+    <linearGradient id="upper-left" gradientUnits="userSpaceOnUse" x1="10" y1="16" x2="104" y2="159">
+      <stop stop-color="#686868"/>
+      <stop offset=".55" stop-color="#292929"/>
+      <stop offset="1" stop-color="#0b0b0b"/>
+    </linearGradient>
+    <linearGradient id="upper-cut" gradientUnits="userSpaceOnUse" x1="190" y1="4" x2="219" y2="114">
+      <stop stop-color="#111111"/>
+      <stop offset=".78" stop-color="#525252"/>
+      <stop offset="1" stop-color="#717171"/>
+    </linearGradient>
+    <linearGradient id="right-cut" gradientUnits="userSpaceOnUse" x1="350" y1="170" x2="264" y2="187">
+      <stop stop-color="#646464"/>
+      <stop offset=".64" stop-color="#252525"/>
+      <stop offset="1" stop-color="#0d0d0d"/>
+    </linearGradient>
+    <linearGradient id="lower-right" gradientUnits="userSpaceOnUse" x1="341" y1="429" x2="220" y2="326">
+      <stop stop-color="#101010"/>
+      <stop offset=".72" stop-color="#444444"/>
+      <stop offset="1" stop-color="#696969"/>
+    </linearGradient>
+    <linearGradient id="lower-cut" gradientUnits="userSpaceOnUse" x1="151" y1="490" x2="159" y2="355">
+      <stop stop-color="#5b5b5b"/>
+      <stop offset=".62" stop-color="#222222"/>
+      <stop offset="1" stop-color="#090909"/>
+    </linearGradient>
+    <linearGradient id="left-cut" gradientUnits="userSpaceOnUse" x1="0" y1="305" x2="101" y2="304">
+      <stop stop-color="#121212"/>
+      <stop offset=".72" stop-color="#343434"/>
+      <stop offset="1" stop-color="#515151"/>
+    </linearGradient>
+    <linearGradient id="centre" gradientUnits="userSpaceOnUse" x1="86" y1="115" x2="280" y2="373">
+      <stop stop-color="#191919"/>
+      <stop offset=".44" stop-color="#080808"/>
+      <stop offset="1" stop-color="#121212"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M0 0H205L92 111 0 223Z" fill="url(#upper-left)"/>
+  <path d="M205 0H350L255 80 92 111Z" fill="url(#upper-cut)"/>
+  <path d="M350 0V245L292 322 255 80Z" fill="url(#right-cut)"/>
+  <path d="M350 245V490H165L292 322Z" fill="url(#lower-right)"/>
+  <path d="M165 490H0L100 386 292 322Z" fill="url(#lower-cut)"/>
+  <path d="M0 490V223L92 111 100 386Z" fill="url(#left-cut)"/>
+  <path d="M92 111 255 80 292 322 100 386Z" fill="url(#centre)"/>
+
+  <g fill="none" stroke="#fff" stroke-width=".55" stroke-linecap="round">
+    <path d="M164 97.3 239 83" opacity=".18"/>
+    <path d="M266 152 278 230" opacity=".12"/>
+    <path d="M114 381.3 180 359.3" opacity=".15"/>
+  </g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <!-- Original seamless pique foil: orderly staggered microdots, with no background ink. -->
+  <defs>
+    <pattern id="pique" width="8" height="8" patternUnits="userSpaceOnUse" overflow="hidden">
+      <g fill="#fff" opacity=".72">
+        <circle cx="2" cy="2" r=".65"/>
+        <circle cx="6" cy="2" r=".65"/>
+        <circle cx="0" cy="6" r=".65"/>
+        <circle cx="4" cy="6" r=".65"/>
+        <circle cx="8" cy="6" r=".65"/>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="80" height="80" fill="url(#pique)"/>
+</svg>

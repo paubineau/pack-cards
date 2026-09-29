@@ -1,0 +1,327 @@
+/* Pack Cards: reusable pack, deck, card and material presentation.
+   Theme with --accent, --recap-tint, --text, --muted and --recap-paper-edge.
+   No document-wide resets are applied; assets resolve relative to this stylesheet. */
+:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection){font-family:var(--pack-cards-font,Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif);line-height:1.55;color:var(--text,#edf1f8)}
+:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection),:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection) *,:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection) *::before,:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection) *::after{box-sizing:border-box}
+:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection) [hidden]{display:none!important}
+:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection) :where(h1,h2,h3,p){margin:0}
+:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection) :where(button){font:inherit;border:1px solid var(--line,#293345);border-radius:9px;cursor:pointer;padding:.68rem 1rem;font-size:.9rem;font-weight:650;display:inline-flex;align-items:center;justify-content:center;gap:.7rem;line-height:1.4;transition:background .15s}
+:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection) :where(button:focus-visible,a:focus-visible){outline:2px solid var(--accent,#e8c477);outline-offset:4px}
+:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection) :where(.eyebrow){font-size:.75rem;font-weight:750;letter-spacing:.13em;color:var(--muted,#a4afc0)}
+/* These defaults also support cards created with the lower-level deck API. */
+:where(.recap-card.recap-collectible){display:flex;flex-direction:column;align-items:center;text-align:center;overflow-wrap:anywhere}
+:where(.recap-card.recap-collectible)>*{flex-shrink:0;max-width:100%}
+:where(.recap-card.recap-collectible) h3{letter-spacing:-.035em;text-wrap:balance}
+:where(.recap-card.recap-collectible) .recap-value{color:var(--accent,#e8c477);letter-spacing:-.045em}
+.recap-pack-scene{--pack-cards-default-width:min(420px,calc(100vw - 76px))}
+@media(max-width:750px),(max-height:750px){.recap-pack-scene{--pack-cards-default-width:min(350px,calc(100vw - 84px))}}
+@keyframes recap-reveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.recap-pack-scene{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:1rem 0;text-align:center;overflow:hidden}
+.recap-pack-scene>.eyebrow{color:var(--accent,#e8c477);margin:0;font-size:.7rem;letter-spacing:.18em}
+.recap-pack-title{font-size:clamp(1.25rem,3vw,1.8rem);letter-spacing:-.025em;margin:0;text-wrap:balance}
+.recap-pack-stack{position:relative;perspective:1000px;margin:1rem 0 2rem;width:clamp(190px,32vw,264px);aspect-ratio:3/4;flex-shrink:0}
+.recap-pack-motion{position:absolute;inset:0;isolation:isolate}
+.recap-pack-motion[data-active=true][data-interacting=true]{transition:none}
+@media(prefers-reduced-motion:reduce){.recap-pack-motion{transform:none!important}}
+.recap-pack-back{position:absolute;top:12px;left:50%;height:calc(100% - 24px);aspect-ratio:63/88;translate:-50% 0;border:3px solid var(--recap-back-edge);border-radius:12px;background:var(--recap-back-paper);box-shadow:0 12px 30px #0005;transform:rotate(-3deg);overflow:hidden}
+.recap-pack-back:nth-child(2){transform:rotate(2deg)}
+.recap-pack{position:absolute;inset:0;padding:0;border:1px solid color-mix(in srgb,var(--accent,#e8c477) 70%,white);border-radius:4px;color:#edf1f8;cursor:pointer;box-shadow:0 24px 60px #0007,0 0 40px color-mix(in srgb,var(--accent,#e8c477) 12%,transparent);background:linear-gradient(125deg,#101725 5%,var(--recap-tint,#3a3020) 40%,#263148 62%,#101725 100%);text-align:center;rotate:var(--recap-pack-angle,0deg);transform:rotate(-3deg);isolation:isolate;touch-action:manipulation}
+.recap-pack:focus-visible{outline:3px solid #fff;outline-offset:8px}
+.recap-pack:disabled{opacity:1;cursor:default}
+.recap-pack::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(110deg,transparent 20%,#ffffff1a 35%,#ffe0aa33 42%,#b2dfff24 48%,transparent 60%);background-size:250% 100%}
+.recap-pack::after{content:"";position:absolute;bottom:0;left:0;right:0;height:16px;background:repeating-linear-gradient(90deg,#ffffff24 0 2px,#0002 2px 4px);border-top:1px solid #ffffff24}
+.recap-pack-seal{position:absolute;top:0;left:0;right:0;height:34px;display:grid;place-items:center;font-size:.55rem;letter-spacing:.16em;color:var(--accent,#e8c477);border-bottom:1px dashed #ffffff80;background:repeating-linear-gradient(90deg,#ffffff12 0 2px,#0002 2px 4px),#172234;transform-origin:100% 50%}
+.recap-pack-face{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:54px 18px 38px}
+.recap-pack-channel{margin-top:.65rem;font-size:.8rem;overflow-wrap:anywhere;max-width:100%}
+.recap-pack-emblem{display:grid;place-items:center;flex:1;min-height:36px;color:var(--accent,#e8c477);font-size:3rem}
+.recap-pack-emblem img{width:84px;height:84px;object-fit:contain;filter:drop-shadow(0 0 20px #ffffff50)}
+.recap-pack-emblem .recap-channel-logo{border-radius:50%;object-fit:cover}
+.recap-pack-credit{position:absolute;right:8.6%;bottom:9.3%;width:8.33%;height:auto;aspect-ratio:1;object-fit:contain;pointer-events:none}
+.recap-pack-edition{font-size:.7rem;font-weight:700;letter-spacing:.08em;overflow-wrap:anywhere;max-width:100%}
+.recap-pack-instruction{position:absolute;top:100%;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 4rem);margin:1.1rem 0 0;color:var(--muted,#a4afc0);font-size:.75rem;font-weight:400;line-height:1.5;pointer-events:none}
+.recap-pack-enhanced .recap-pack-motion>.recap-pack-instruction,.recap-pack-opening .recap-pack-instruction,.recap-pack-torn .recap-pack-instruction{visibility:hidden}
+.recap-pack-skip{background:none;border:0;color:var(--muted,#a4afc0);font-size:.8rem;min-height:44px;text-decoration:underline;text-underline-offset:4px}
+@media(max-height:700px){.recap-pack-scene{gap:.5rem}.recap-pack-stack{width:198px;margin:.4rem 0 2rem}.recap-pack-title{font-size:1.2rem}.recap-pack-emblem{min-height:48px}.recap-pack-emblem img{width:48px;height:48px}}
+@media(prefers-reduced-motion:no-preference){
+  .recap-pack::before{animation:recap-pack-foil 5s ease-in-out infinite}
+  .recap-pack:not(.recap-pack-illustrated):not(:disabled):hover{transform:rotate(0) translateY(-4px);transition:transform .2s}
+  .recap-pack-opening .recap-pack{animation:recap-pack-open 1.6s cubic-bezier(.4,0,.2,1) both}
+  .recap-pack-opening .recap-pack-seal{animation:recap-pack-tear .7s .2s ease-in both}
+  .recap-pack-opening .recap-pack-back{animation:recap-pack-release 1.6s cubic-bezier(.2,.7,.3,1) both}
+  .recap-pack-opening .recap-pack-stack::after{content:"";position:absolute;inset:-25%;pointer-events:none;background:radial-gradient(ellipse,#fff8,transparent 60%);animation:recap-pack-flash 1.6s ease-out both}
+  @keyframes recap-pack-foil{0%,100%{background-position:100% 0}50%{background-position:0 0}}
+  @keyframes recap-pack-tear{0%,20%{transform:none}60%{transform:translate(20px,-32px) rotate(12deg);opacity:1}100%{transform:translate(100px,-100px) rotate(32deg);opacity:0}}
+  @keyframes recap-pack-open{0%{transform:rotate(-3deg)}12%{transform:rotate(-5deg) scale(1.04)}24%{transform:rotate(2deg) scale(1.04)}40%{transform:rotate(0) scale(1.04);opacity:1}75%,100%{transform:translateY(140%) rotate(12deg);opacity:0}}
+  @keyframes recap-pack-release{0%,25%{transform:rotate(var(--recap-pack-angle,0deg)) translateY(var(--recap-pack-start-y,8%)) scale(var(--recap-release-start-scale,.7))}58%{transform:rotate(var(--recap-pack-angle,0deg)) translateY(var(--recap-pack-lift,-38px)) scale(var(--recap-release-end-scale,1.04))}100%{transform:rotate(0deg) translateY(0) scale(1)}}
+  @keyframes recap-pack-flash{0%,25%,100%{opacity:0;transform:scale(.5)}48%{opacity:.55;transform:scale(1.15)}}
+}
+/* Matte faces and all backs share the same uncoloured card-stock edge. */
+/* Keep the original dark reverse, with neutral off-white edges on every card. */
+.recap-pack-back,.recap-ready-card,.recap-card-reverse,.recap-deck-under{--recap-back-paper:#101725;--recap-back-edge:var(--recap-paper-edge,#e9e5db);--recap-back-ink:color-mix(in srgb,var(--recap-back-accent,var(--accent,#e8c477)) 40%,#f4f8ff);--recap-back-tint:color-mix(in srgb,var(--recap-back-accent,var(--accent,#e8c477)) 18%,#101a2a)}
+/* A real portrait card, with an opaque face and a separate printed reverse. */
+.recap-deck-stage{position:relative;min-height:100%;display:grid;place-items:center;padding:24px 18px 28px;touch-action:pan-y pinch-zoom}
+.recap-deck{position:relative;width:min(100%,420px);aspect-ratio:63/88;perspective:1400px}
+.recap-deck-under{position:absolute;inset:0;border:3px solid var(--recap-back-edge);border-radius:20px;background:var(--recap-back-paper);box-shadow:0 5px 12px #0005;transform:translate(8px,5px) rotate(3deg)}
+.recap-deck-under:nth-child(2){transform:translate(-7px,4px) rotate(-3deg)}
+.recap-card-turn{position:absolute;inset:0;transform-style:preserve-3d}
+.recap-collection{--pile-width:72;--pile-height:calc(72*88/63);position:relative;flex-shrink:0;width:min(100%,460px);height:112px;margin:0 auto}
+.recap-collection[hidden]{display:none}
+.recap-pile-visual,.recap-pile-button{position:absolute;left:18px;top:8px;width:calc(var(--pile-width)*1px);height:calc(var(--pile-height)*1px)}
+.recap-pile-visual{pointer-events:none}
+.recap-collection-empty{visibility:hidden}
+.recap-pile-layer{position:absolute;left:50%;top:50%;width:calc(var(--pile-card-width)*1px);height:calc(var(--pile-card-height)*1px);transform:translate(calc(-50% + var(--pile-x)),calc(-50% + var(--pile-y))) rotate(var(--pile-rotation)) scale(min(calc(var(--pile-width)/var(--pile-card-width)),calc(var(--pile-height)/var(--pile-card-height))))}
+.recap-pile-layer>.recap-card-reverse{transform:none}
+.recap-card-flight-turn>.recap-card.recap-collectible{width:100%;height:100%;min-height:0;margin:0;overflow:hidden;transform:translateZ(1px)}
+.recap-card-flight-turn>.recap-card-reverse{transform:rotateY(180deg) translateZ(1px)}
+.recap-pile-button{padding:0;background:transparent;border:0;border-radius:6px;transform:translate(var(--pile-x,0px),var(--pile-y,0px)) rotate(var(--pile-rotation,0deg))}
+.recap-pile-button:hover{filter:none}
+.recap-pile-button:disabled{opacity:.55;cursor:default}
+.recap-card-flight{position:fixed;z-index:5;pointer-events:none;transform-origin:center;perspective:1400px;will-change:transform}
+.recap-card-flight-turn{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+.recap-deck.recap-deck-dealing{transform:none;transition:none}
+@media(min-width:1000px){
+  .recap-collection{--pile-width:132;--pile-height:calc(132*88/63);position:absolute;left:max(16px,calc((100% - 960px)/2 - 8px));top:50%;transform:translateY(-50%);width:156px;height:240px;margin:0}
+  .recap-pile-visual,.recap-pile-button{left:12px;top:8px}
+}
+.recap-card-reverse{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;border:5px solid var(--recap-back-edge);border-radius:20px;background:radial-gradient(ellipse,var(--recap-back-tint),#101a2a 70%);box-shadow:inset 0 0 0 2px #ffffff24;transform:rotateY(180deg);backface-visibility:hidden;pointer-events:none}
+.recap-card-reverse img{width:76px;height:76px;object-fit:contain;margin:2rem}
+.recap-ready-scene{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.recap-ready-scene>.recap-deck-stage{min-height:0;width:100%;padding-bottom:12px}
+.recap-ready-card{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;padding:0;border:5px solid var(--recap-back-edge);border-radius:20px;background:var(--recap-back-paper);box-shadow:0 20px 60px #0008;overflow:hidden;cursor:pointer}
+.recap-ready-card:hover{filter:none}
+.recap-ready-hint{font-size:.85rem;color:var(--muted,#a4afc0);max-width:32ch;margin:.6rem 0 .2rem;padding:0 .5rem;text-wrap:balance}
+/* Scale the same printed composition from emerging cards to full-size reverses. */
+.recap-pack-back,.recap-ready-card,.recap-card-reverse,.recap-deck-under{container-type:inline-size}
+.recap-card-print{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4.68cqw;padding:5.85cqw;border-radius:inherit;overflow:hidden;background:repeating-linear-gradient(135deg,transparent 0 8.78cqw,#ffffff05 9.02cqw 9.27cqw),color-mix(in srgb,var(--recap-back-tint,#202c3b) 35%,#0f1828);color:#edf1f8;isolation:isolate}
+.recap-card-print::before{content:"";position:absolute;inset:2.93cqw;border:1px solid #ffffff32;border-radius:1.95cqw;pointer-events:none}
+
+/* Match the pack's two fine diamonds and their spacing around the channel seal. */
+.recap-print-seal{position:relative;display:grid;place-items:center;width:26.83cqw;height:26.83cqw;margin:8.59cqw 0;transform:rotate(45deg)}
+.recap-print-seal::before,.recap-print-seal::after{content:"";position:absolute;inset:0;border:.29cqw solid var(--recap-back-accent,var(--accent,#e8c477));pointer-events:none}
+.recap-print-seal::after{inset:-1.6cqw;border-color:#f8e4ad42}
+.recap-print-seal img,.recap-print-seal>span{width:17.56cqw;height:17.56cqw;object-fit:contain;transform:rotate(-45deg);margin:0;font-size:11.71cqw}
+.recap-print-seal .recap-channel-logo{width:22cqw;height:22cqw;border-radius:50%;object-fit:cover}
+.recap-card-print>.recap-print-credit{position:absolute;right:5.85cqw;bottom:5.85cqw;width:8.2cqw;height:8.2cqw;margin:0;object-fit:contain}
+.recap-print-channel{font-weight:700;font-size:3.9cqw;overflow-wrap:anywhere;max-width:100%}
+.recap-print-edition{font-size:2.34cqw;letter-spacing:.2em;color:var(--recap-back-ink)}
+.recap-card.recap-collectible{position:relative;isolation:isolate;width:100%;height:100%;min-height:0;margin:0;padding:18px 24px 12px;border:5px solid transparent;border-radius:20px;background:linear-gradient(145deg,#182438,#0f1828 55%,var(--recap-tint,#3a3020)) padding-box,linear-gradient(130deg,#ffffff40,#00000030 24%,#ffffff20 47%,#ffffff50 70%,#00000020) border-box,linear-gradient(130deg,var(--foil-colors)) border-box;box-shadow:inset 0 0 0 1px #ffffff24,0 16px 30px #0005;backface-visibility:hidden;animation:none;justify-content:flex-start;overflow:hidden}
+.recap-card.recap-collectible>*{animation:none}
+.recap-card.recap-collectible{cursor:pointer}
+.recap-card.recap-collectible>.recap-card-content{--recap-content-gap:12px;display:flex;flex-direction:column;align-items:center;justify-content:safe center;gap:var(--recap-content-gap);flex:1 1 0;min-height:0;width:100%;overflow:clip}
+.recap-card-content>*{flex-shrink:0;max-width:100%}
+.recap-card-header,.recap-card-footer{display:flex;align-items:center;justify-content:space-between;gap:.8rem;width:100%;font-size:.65rem;letter-spacing:.12em;font-weight:700;color:#c2ccda}
+.recap-card-header{padding-bottom:8px;margin-bottom:12px;border-bottom:1px solid #ffffff24}
+.recap-card-channel{min-width:0;overflow-wrap:anywhere;letter-spacing:.03em}
+.recap-card-header span:last-child{flex-shrink:0;color:var(--accent,#e8c477);white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:.03em}
+.recap-collectible>.recap-card-content>.eyebrow{font-size:.65rem;letter-spacing:.12em;margin:0}
+.recap-collectible>.recap-card-content>.recap-rarity-label{display:inline-flex;align-items:center;color:#c2ccda;letter-spacing:.03em}
+.live-rarity-code{display:inline-flex;align-items:center;gap:.4rem;margin-inline-start:.4rem;font-family:ui-monospace,monospace;font-size:.55rem;font-weight:800;line-height:1;letter-spacing:.06em;white-space:nowrap}.live-rarity-code::before{content:"";width:1px;height:.85em;background:currentColor;opacity:.35}
+.recap-collectible h3{font-size:1.45rem;line-height:1.18;margin:0}
+.recap-collectible>.recap-card-content>.recap-value{font-size:2rem;line-height:1.15;margin:4px 0;font-weight:800}
+.recap-collectible>.recap-card-content>.recap-number{font-size:4rem;line-height:1.05}
+.recap-collectible>.recap-card-content>.recap-unit{font-size:.95rem;margin:0}
+.recap-card.recap-compact>.recap-card-content{--recap-content-gap:6px}
+.recap-card.recap-compact>.recap-card-content>.eyebrow:not(.recap-rarity-label){display:none}
+.recap-card.recap-compact h3{font-size:1.25rem}
+.recap-card.recap-compact>.recap-card-content>.recap-value{margin:0}
+.recap-card-footer{margin-top:auto;padding-top:14px;letter-spacing:.03em;text-align:left}
+.recap-card-footer span{overflow-wrap:anywhere;min-width:0}
+.recap-card-footer img{width:28px;height:28px;object-fit:contain;flex-shrink:0}
+@media(max-width:750px),(max-height:750px){
+  .recap-deck-stage{padding:16px 22px 20px}
+  .recap-deck{width:min(100%,350px)}
+  .recap-ready-card{border-width:4px;border-radius:16px}
+  .recap-ready-hint{font-size:.8rem;margin:.2rem 0}
+  .recap-card.recap-collectible{padding:10px 14px 8px;border-width:4px;border-radius:16px}
+  .recap-card.recap-collectible>.recap-card-content{--recap-content-gap:8px}
+  .recap-card-header{margin-bottom:8px;padding-bottom:6px;font-size:.6rem}
+  .recap-collectible h3{font-size:1.25rem}
+  .recap-collectible>.recap-card-content>.recap-value{font-size:1.6rem}
+  .recap-collectible>.recap-card-content>.recap-number{font-size:3.2rem}
+  .recap-collectible>.recap-card-content>.recap-unit{font-size:.85rem}
+  .recap-card-footer{padding-top:8px;font-size:.6rem}
+  .recap-card-footer img{width:24px;height:24px}
+  .recap-card.recap-compact>.recap-card-content{--recap-content-gap:5px}
+  .recap-card.recap-compact h3{font-size:1.1rem}
+}
+@media(max-width:360px){
+  .recap-collectible h3{font-size:1.1rem}
+  .recap-collectible>.recap-card-content>.recap-value{font-size:1.4rem}
+  .recap-collectible>.recap-card-content>.recap-number{font-size:2.6rem}
+}
+@media(prefers-reduced-motion:no-preference){
+  .recap-ready-scene .recap-deck{animation:recap-deck-arrive .45s cubic-bezier(.2,.7,.3,1) both}
+  .recap-card-turn{animation:recap-card-flip .8s cubic-bezier(.2,.65,.3,1) both}
+  .recap-card-turn.recap-turn-backwards{animation:none}
+  .recap-card-turn.recap-turn-answer{animation:recap-reveal .3s ease-out both}
+  .recap-card-flight{animation:recap-card-to-pile .68s cubic-bezier(.4,0,.2,1) both}
+  .recap-card-flight.recap-card-flight-back{animation-name:recap-card-from-pile}
+  .recap-card-flight-turn{animation:recap-card-turn-down .68s cubic-bezier(.3,.1,.2,1) both}
+  .recap-card-flight-back>.recap-card-flight-turn{animation-name:recap-card-turn-up}
+  @keyframes recap-deck-arrive{from{translate:var(--recap-arrive-x,0px) var(--recap-arrive-y,0px);scale:var(--recap-arrive-scale,.66)}to{translate:0 0;scale:1}}
+  @keyframes recap-card-flip{0%,18%{transform:rotateY(180deg) rotateZ(3deg) scale(var(--recap-flip-start-scale,.96))}70%{transform:rotateY(-8deg) rotateZ(-1deg) scale(var(--recap-flip-end-scale,1.025))}100%{transform:rotateY(0) rotateZ(0) scale(1)}}
+  @keyframes recap-card-to-pile{from{transform:none}to{transform:translate(var(--deal-x),var(--deal-y)) rotate(var(--deal-rotation)) scale(var(--deal-scale))}}
+  @keyframes recap-card-from-pile{from{transform:translate(var(--deal-x),var(--deal-y)) rotate(var(--deal-rotation)) scale(var(--deal-scale))}to{transform:none}}
+  @keyframes recap-card-turn-down{from{transform:rotateX(0) rotateY(0) rotateZ(0)}45%{transform:rotateX(12deg) rotateY(-95deg) rotateZ(-8deg)}to{transform:rotateX(0) rotateY(-180deg) rotateZ(0)}}
+  @keyframes recap-card-turn-up{from{transform:rotateX(0) rotateY(-180deg) rotateZ(0)}45%{transform:rotateX(-12deg) rotateY(-85deg) rotateZ(8deg)}to{transform:rotateX(0) rotateY(0) rotateZ(0)}}
+}
+
+/* The foil renderer is temporary; these keyframes keep its styles CSP-safe. */
+.recap-pack-enhanced{overflow:visible}
+.recap-pack.recap-pack-illustrated{border:0;border-radius:0;transform:none;background:none;box-shadow:none;filter:drop-shadow(0 22px 22px #0006)}
+.recap-pack-illustrated img{display:block;width:100%;height:100%;object-fit:contain}
+.recap-pack-illustrated::before,.recap-pack-illustrated::after{display:none}
+.recap-webgl-pack{position:absolute;inset:0;z-index:2;rotate:var(--recap-pack-angle,0deg);isolation:isolate;filter:drop-shadow(0 22px 22px #0006)}
+.recap-pack-lining{position:absolute;inset:0;z-index:0;rotate:var(--recap-pack-angle,0deg);isolation:isolate;pointer-events:none}
+.recap-webgl-pack button:hover{filter:none}
+.recap-pack-scene:has(.recap-pack-illustrated) .recap-pack-back,.recap-pack-enhanced .recap-pack-back{top:8px;height:calc(100% - 16px);transform:scale(.93);opacity:0}
+.recap-pack-scene.recap-pack-enhanced .recap-pack-back{z-index:1;transform:rotate(var(--recap-pack-angle,0deg)) translateY(3%) scale(.84);opacity:1}
+.recap-pack-opening:has(.recap-pack-illustrated) .recap-pack-back{opacity:1}
+/* Size the sleeve from the normal reading size; zoom never changes the final deck. */
+.recap-pack-scene[data-pack-zoom=false]{--recap-pack-start-y:0%;--recap-pack-start-scale:1;--recap-pack-mid-scale:1;--recap-pack-end-scale:1;--recap-release-start-scale:1;--recap-release-end-scale:1}
+.recap-pack-scene[data-pack-zoom=false] .recap-pack-stack{width:calc(var(--recap-nozoom-card-width,var(--pack-cards-default-width))*22/21 + 12px)}
+.recap-pack-scene[data-pack-zoom=false] .recap-pack-back{top:8px;width:var(--recap-nozoom-card-width,var(--pack-cards-default-width));height:auto;transform:rotate(var(--recap-pack-angle,0deg))}
+.recap-deck-stage[data-pack-zoom=false]{--recap-arrive-scale:1;--recap-flip-start-scale:1;--recap-flip-end-scale:1}
+@keyframes cardpack-webgl-fade{0%,80%{opacity:1}100%{opacity:0}}
+.recap-pack-viewport{position:absolute;overflow:hidden;pointer-events:none}
+.recap-pack-frame{position:absolute;perspective:1000px}
+.recap-pack-flight{position:fixed;z-index:20;display:block;min-height:0;margin:0;padding:0;pointer-events:none}
+.recap-pack-flight.recap-pack-pending .recap-webgl-pack,.recap-pack-flight.recap-pack-pending .recap-pack-lining{animation-play-state:paused}
+.recap-pack-flight-deck{position:absolute;z-index:1;transform-origin:center;pointer-events:none}
+@media(prefers-reduced-motion:no-preference){
+  .recap-pack-torn .recap-webgl-pack,.recap-pack-torn .recap-pack-lining{animation:recap-wrapper-away 1.35s cubic-bezier(.42,0,.8,.5) both;pointer-events:none}
+  .recap-pack-torn .recap-pack-back{animation:recap-pack-emerge 1.35s cubic-bezier(.2,.7,.3,1) both}
+  /* The renderer's DOM fallback hands off 300ms after tearing. Finish upright within that window. */
+  .recap-pack-torn.recap-pack-quick .recap-webgl-pack,.recap-pack-torn.recap-pack-quick .recap-pack-lining{animation-duration:.28s}
+  .recap-pack-torn.recap-pack-quick .recap-pack-back{animation-duration:.24s}
+  /* The opaque sleeve slips off the cards, then falls out of view without growing page overflow. */
+  @keyframes recap-wrapper-away{0%,20%{transform:translateY(0)}65%{transform:translateY(60%)}100%{transform:translateY(calc(100vh + 100%))}}
+  /* Hold the pack's angle until the card bottom has cleared the torn lip, then straighten. */
+  @keyframes recap-pack-emerge{0%{transform:rotate(var(--recap-pack-angle,0deg)) translateY(var(--recap-pack-start-y,3%)) scale(var(--recap-pack-start-scale,.84))}65%{transform:rotate(var(--recap-pack-angle,0deg)) translateY(-22%) scale(var(--recap-pack-mid-scale,.92))}100%{transform:rotate(0deg) translateY(-30%) scale(var(--recap-pack-end-scale,1.05))}}
+  .recap-deck,.recap-pack-motion[data-active=true]{transform:perspective(1400px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg))}
+  .recap-deck{transition:transform .22s ease-out,--foil-x .22s ease-out,--foil-y .22s ease-out,--foil-angle .22s ease-out,--foil-catch .22s ease-out}
+  .recap-pack-motion[data-active=true]{transition:transform .22s ease-out}
+}
+/* The print stays fixed. Separate material and clearcoat responses follow the same card pose.
+   Colour is confined to those reflective details; there are no full-face moving bands. */
+:where(.recap-card.recap-collectible){--foil-light-angle:115deg;--foil-colors:#ef91dc 0%,#ab9aff 16%,#74e3f5 32%,#8ce5b1 48%,#f3d899 64%,#ef91dc 100%;--foil-pattern:url('./assets/foil-grain.svg');--foil-pattern-size:100px 100px;--foil-pattern-strength:.65;--foil-detail-strength:1.1;--foil-gloss:1;--foil-strength:.7;--foil-glare-strength:.14;--foil-details:url('./assets/foil-details.svg#left');--foil-details-right:url('./assets/foil-details.svg#right');isolation:isolate}
+.recap-card.recap-collectible::before{width:auto;height:auto;animation:none;transform:none;opacity:1}
+.recap-card.recap-collectible::before{display:block;content:"";position:absolute;inset:7px;z-index:-1;border:1px solid #e1efff4d;border-radius:10px;background:none;box-shadow:inset 0 1px 0 #fff2,0 1px 0 #0008;pointer-events:none}
+/* The corner rails face the engraving tips on the same axis, with a deliberate gap. */
+.recap-card.recap-collectible:has(>.recap-foil-surface)::before{inset-inline:12px;mask-image:linear-gradient(#000 0% 16%,transparent 16% 84%,#000 84% 100%)}
+.recap-collectible>.recap-card-header,.recap-collectible>.recap-card-footer{text-shadow:0 1px 3px #020611,0 0 6px #020611}
+.recap-collectible>.recap-card-content{text-shadow:0 1px 2px #020611,0 0 8px #020611b3}
+.recap-collectible>.recap-card-content>.eyebrow{padding:1px 4px}
+/* The broad reflection travels in both axes; material light and tint move more slowly. */
+.recap-card.recap-collectible{--reflection-x:calc(50% + (var(--foil-x) - 50%)*.8);--reflection-y:calc(50% + (var(--foil-y) - 50%)*.8)}
+.recap-card.recap-collectible{--material-x:calc(50% + (var(--foil-x) - 50%)*.45);--material-y:calc(50% + (var(--foil-y) - 50%)*.45);--tint-x:calc(50% - (var(--foil-x) - 50%)*.3);--tint-y:calc(50% - (var(--foil-y) - 50%)*.3)}
+.recap-foil-surface,.recap-foil-glare,.recap-foil-stock{display:block;position:absolute;inset:0;z-index:-2;overflow:hidden;border-radius:14px;pointer-events:none}
+.recap-foil-surface{isolation:isolate;mix-blend-mode:screen}
+.recap-foil-surface>span,.recap-foil-surface>span::before,.recap-foil-surface>span::after,.recap-foil-glare::after{position:absolute;inset:0;pointer-events:none}
+.recap-foil-details{mix-blend-mode:screen;opacity:calc(var(--foil-detail-strength)*var(--foil-strength)*(.7 + var(--foil-catch)*.3));mask-image:radial-gradient(ellipse farthest-corner at var(--material-x) var(--material-y),#000e 0%,#000a 65%,#0005 140%)}
+/* Wider tooling uses the interrupted rail's space, never the text or corner metadata. */
+/* Only the right-hand shape is mirrored; both sides retain the same card-wide light field. */
+.recap-foil-surface>.recap-foil-details::before,.recap-foil-surface>.recap-foil-details::after{content:"";inset:0 4px;mask:var(--foil-details) left center/17px 68% no-repeat,var(--foil-details-right) right center/17px 68% no-repeat}
+.recap-foil-details::before{background-image:linear-gradient(calc(var(--foil-light-angle) + var(--foil-angle)),var(--foil-colors));background-size:180% 180%;background-position:var(--tint-x) var(--tint-y);filter:saturate(1.1) brightness(1.05)}
+.recap-foil-details::after{background:radial-gradient(ellipse farthest-corner at var(--material-x) var(--material-y),#f0f7ff40 0%,#f0f7ff10 120%);opacity:calc(.15 + var(--foil-catch)*.15)}
+/* Grain and foil catch the same light; no opposing white hotspot washes out the print. */
+.recap-foil-texture{mix-blend-mode:screen;opacity:calc(var(--foil-pattern-strength)*var(--foil-strength)*(.55 + var(--foil-catch)*.45))}
+.recap-foil-texture::before{content:"";mask-image:var(--foil-pattern);mask-mode:luminance;mask-size:var(--foil-pattern-size);background-image:radial-gradient(ellipse farthest-corner at var(--material-x) var(--material-y),#aaa 0%,#777 50%,#303030 120%),linear-gradient(calc(var(--foil-light-angle) + var(--foil-angle)),var(--foil-colors));background-size:100% 100%,230% 200%;background-position:0 0,var(--tint-y) var(--tint-x);background-blend-mode:multiply;filter:brightness(1.05) saturate(1.1)}
+/* Larger microtooling stays readable face-on and catches more light as the card tilts. */
+.recap-collectible[data-pattern="brushed"]{--foil-etch-mask:url('./assets/foil-pattern-satin.svg')}
+.recap-collectible[data-pattern="guilloche"]{--foil-etch-mask:url('./assets/foil-pattern-guilloche.svg')}
+.recap-collectible[data-pattern="dots"]{--foil-etch-mask:url('./assets/foil-pattern-pique.svg')}
+.recap-foil-pattern{mix-blend-mode:screen;opacity:min(1,calc(var(--foil-strength)*(.2 + .81*max(0,(var(--foil-catch) - .5)*2))));mask-image:radial-gradient(ellipse farthest-side at var(--reflection-x) var(--reflection-y),#000 0%,#0009 45%,transparent 95%)}
+.recap-foil-pattern::before{content:"";mask-image:var(--foil-etch-mask);mask-size:120px 120px;background-image:linear-gradient(calc(var(--foil-light-angle) + var(--foil-angle)),var(--foil-colors));background-size:180% 180%;background-position:var(--tint-x) var(--tint-y)}
+/* One soft-light reflection covers the ready card, its reverse during flips and the face. */
+.recap-foil-stock{background:radial-gradient(ellipse farthest-corner at var(--reflection-x) var(--reflection-y),#edf4ff 0%,#bac6d4 48%,#808080 120%);mix-blend-mode:soft-light;opacity:calc(var(--foil-strength)*.06)}
+.recap-foil-glare{background:radial-gradient(ellipse farthest-corner at var(--reflection-x) var(--reflection-y),#edf4ff 0%,#bac6d4 48%,#808080 120%);mix-blend-mode:soft-light;opacity:min(.24,calc(var(--foil-glare-strength,0)*var(--foil-gloss,1)*(.25 + var(--foil-catch)*.75)))}
+.recap-foil-glare::after{content:"";inset:2px;border:1px solid #ecf6ff;border-radius:12px;mask-image:radial-gradient(ellipse farthest-corner at var(--reflection-x) var(--reflection-y),#000 0%,#0002 120%);opacity:.9}
+/* The original foil textures, now selected independently from stock and coating. */
+.recap-card.recap-collectible:not([data-decoration=frame],[data-decoration=frame-lettering])::before{display:none}
+.recap-card.recap-collectible[data-coverage=border] .recap-foil-texture,.recap-card.recap-collectible[data-coverage=border] .recap-foil-pattern{clip-path:polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,7.5% 9%,7.5% 91%,92.5% 91%,92.5% 9%,7.5% 9%)}
+.recap-card.recap-collectible[data-stock=paper][data-foil=none]{background:#141e2e;border-color:var(--recap-paper-edge,#e9e5db)}
+
+.recap-collectible[data-pattern="stardust"]{--foil-pattern:url('./assets/foil-flakes.svg');--foil-pattern-size:125% 125%;--foil-pattern-strength:1;--foil-detail-strength:.4}
+/* Fine stardust keeps its palette at rest; a local glint catches the same fixed stars on tilt. */
+.recap-collectible[data-pattern="stardust"] .recap-foil-texture{opacity:calc(var(--foil-pattern-strength)*var(--foil-strength)*(.7 + var(--foil-catch)*.3))}
+.recap-collectible[data-pattern="stardust"] .recap-foil-texture::before{background-image:radial-gradient(ellipse farthest-corner at var(--material-x) var(--material-y),#eee 0%,#aaa 45%,#666 100%),linear-gradient(calc(var(--foil-light-angle) + var(--foil-angle)),var(--foil-colors));background-size:100% 100%,150% 150%;filter:brightness(1.55) saturate(1.2)}
+.recap-collectible[data-pattern="stardust"] .recap-foil-texture::after{content:"";mask-image:var(--foil-pattern);mask-mode:luminance;mask-size:var(--foil-pattern-size);mask-repeat:no-repeat;background:radial-gradient(ellipse at var(--reflection-x) var(--reflection-y),#f5f5ff 0%,#e9efff88 16%,#e9efff18 35%,transparent 58%);opacity:min(1,calc(.35 + (var(--foil-catch) - .5)*1.3))}
+.recap-collectible[data-pattern="stardust"] .recap-foil-texture::before,.recap-collectible[data-pattern="stardust"] .recap-foil-texture::after{mask-position:center}
+.recap-collectible[data-pattern="facets"]{--foil-pattern:url('./assets/foil-facets.svg');--foil-pattern-size:100% 100%;--foil-pattern-strength:.8;--foil-detail-strength:.55}
+.recap-collectible:is([data-pattern="stardust"],[data-pattern="facets"]) .recap-foil-texture::before{mask-repeat:no-repeat}
+
+.recap-card.recap-collectible[data-stock="metal"]{background:linear-gradient(145deg,color-mix(in srgb,var(--foil-metal-tone) 12%,#1b2430),#151d2a) padding-box,linear-gradient(130deg,color-mix(in srgb,var(--foil-metal-tone) 20%,#edf4fa),color-mix(in srgb,var(--foil-metal-tone) 25%,#65717e) 24%,color-mix(in srgb,var(--foil-metal-tone) 35%,#c4cfd9) 47%,color-mix(in srgb,var(--foil-metal-tone) 20%,#586777) 70%,color-mix(in srgb,var(--foil-metal-tone) 20%,#e4edf5)) border-box}
+.recap-card.recap-collectible[data-stock="metal"][data-palette="silver"]{background:linear-gradient(145deg,#273344,#151d2c) padding-box,linear-gradient(130deg,#e5eff5,#677c89 24%,#beced7 47%,#667887 70%,#d4e5ec) border-box}
+/* The palette also tints the neutral metal; Silver keeps its intrinsic palette. */
+.recap-collectible[data-palette="silver"]{--foil-colors:#8da4b8 0%,#eaf8ff 30%,#a0b5c8 55%,#fff 75%,#8da4b8 100%;--foil-metal-tone:#a0b5c8}
+.recap-collectible[data-palette="spectrum"]{--foil-colors:#ef91dc 0%,#ab9aff 16%,#74e3f5 32%,#8ce5b1 48%,#f3d899 64%,#ef91dc 100%;--foil-metal-tone:#b6b9cf}
+.recap-collectible[data-palette="ice"]{--foil-colors:#548bac 0%,#becdda 18%,#76d1db 30%,#8b94be 42%,#548bac 60%;--foil-metal-tone:#94bacd}
+.recap-collectible[data-palette="amber"]{--foil-colors:#895123 0%,#e7c98c 18%,#ba824f 30%,#f6d8a7 42%,#895123 60%;--foil-metal-tone:#cfa866}
+.recap-collectible[data-palette="rose"]{--foil-colors:#885e9a 0%,#d7a1c0 18%,#8b91cb 30%,#e4bbaa 42%,#885e9a 60%;--foil-metal-tone:#bc99bf}
+.recap-collectible[data-palette="channel"]{--foil-colors:var(--foil-channel-colors,#ef91dc 0%,#ab9aff 16%,#74e3f5 32%,#8ce5b1 48%,#f3d899 64%,#ef91dc 100%);--foil-metal-tone:var(--accent,#e8c477)}
+@property --foil-x{syntax:'<percentage>';inherits:true;initial-value:50%}
+@property --foil-y{syntax:'<percentage>';inherits:true;initial-value:50%}
+@property --foil-angle{syntax:'<angle>';inherits:true;initial-value:0deg}
+@property --foil-catch{syntax:'<number>';inherits:true;initial-value:.5}
+@media(max-width:750px),(max-height:750px){.recap-card.recap-collectible::before{inset:5px}.recap-card.recap-collectible:has(>.recap-foil-surface)::before{inset-inline:8px}.recap-foil-surface,.recap-foil-glare{border-radius:11px}.recap-foil-surface>.recap-foil-details::before,.recap-foil-surface>.recap-foil-details::after{mask-size:9px 68%}}
+@media(prefers-reduced-motion:reduce){.recap-deck{transform:none;transition:none}.recap-card.recap-collectible{--foil-x:50%;--foil-y:50%;--foil-angle:0deg;--foil-catch:.5}}
+
+/* Pearl coating adds the original broad iridescent sheen, independently of foil and tooling. */
+.recap-card.recap-collectible>.recap-foil-pearl{position:absolute;inset:0;z-index:-1;overflow:hidden;border-radius:inherit;pointer-events:none;opacity:calc(var(--foil-strength,.7)*.9);mask-image:radial-gradient(ellipse at 50% 48%,#0006 10%,#000a 50%,#000 90%)}
+.recap-foil-pearl>span,.recap-pearl-texture::before,.recap-pearl-sweep::before{position:absolute;inset:0;pointer-events:none}
+.recap-pearl-texture,.recap-pearl-gleam,.recap-pearl-sweep{mix-blend-mode:screen}
+.recap-pearl-texture::before{content:"";background-image:linear-gradient(calc(var(--foil-light-angle) + var(--foil-angle,0deg)),#080808 12%,#282828 30%,#999 48%,#e5e5e5 52%,#727272 62%,#181818 78%,#080808 100%),linear-gradient(calc(var(--foil-light-angle) + var(--foil-angle,0deg)),var(--foil-colors));background-size:180% 180%,180% 180%;background-position:var(--reflection-x,50%) var(--reflection-y,50%),var(--tint-x,50%) var(--tint-y,50%);background-blend-mode:multiply;filter:saturate(.65);opacity:calc(.45 + (var(--foil-catch,.5) - .5)*.35)}
+.recap-pearl-gleam{background-image:linear-gradient(calc(var(--foil-light-angle) + var(--foil-angle,0deg)),transparent 27%,#edf3fc10 39%,#f4f8ff80 50%,#edf3fc10 61%,transparent 73%);background-size:180% 180%;background-position:var(--reflection-x,50%) var(--reflection-y,50%);opacity:.35}
+.recap-pearl-sweep{opacity:0}
+.recap-pearl-sweep::before{content:"";background:linear-gradient(115deg,transparent 35%,#b9deeb 47%,#fff 50%,#b9deeb 53%,transparent 65%);background-size:250% 160%;opacity:.18}
+@media(prefers-reduced-motion:no-preference){
+  .recap-card.recap-collectible.rarity-reveal>.recap-foil-pearl .recap-pearl-sweep{animation:recap-effect-reveal 1.8s .3s ease-out both}
+  .recap-card.recap-collectible.rarity-reveal>.recap-foil-pearl .recap-pearl-sweep::before{animation:recap-effect-light 1.8s .3s ease-out both}
+}
+
+/* Engraving and stamped lettering retain their original reflective layers. */
+/* Material colour belongs to the selected decoration, independently of rarity. */
+.recap-card.recap-collectible:is([data-effect=engraved],[data-effect=engraved-lettering]):not([data-palette=silver]){--effect-tint:var(--foil-metal-tone,#b6b9cf);--effect-colors:color-mix(in srgb,#8193a5 88%,var(--effect-tint)) 0%,color-mix(in srgb,#dbe5ee 88%,var(--effect-tint)) 22%,#f5faff 42%,color-mix(in srgb,#9aafbd 88%,var(--effect-tint)) 58%,#faffff 78%,color-mix(in srgb,#8193a5 88%,var(--effect-tint)) 100%}
+.recap-card.recap-collectible:is([data-effect=engraved],[data-effect=engraved-lettering]){--effect-texture:url('./assets/rarity-legendary.svg');--effect-center:16% 60%;--effect-light:1;--effect-gleam:.25}
+.recap-card.recap-collectible:is([data-effect=engraved],[data-effect=engraved-lettering])[data-engraving=contour]{--effect-texture:url('./assets/rarity-epic-contour.svg');--effect-center:74% 70%}
+.recap-card.recap-collectible:is([data-effect=engraved],[data-effect=engraved-lettering])[data-engraving=facets]{--effect-texture:url('./assets/rarity-legendary-facets.svg');--effect-center:30% 24%}
+.recap-card.recap-collectible>.recap-foil-effect{position:absolute;inset:0;z-index:-1;overflow:hidden;border-radius:inherit;pointer-events:none;opacity:calc(var(--foil-strength,.7)*var(--effect-light,0));mask-image:radial-gradient(ellipse at 50% 48%,#000a 10%,#000d 48%,#000 85%)}
+.recap-card.recap-collectible[data-effect=off]>.recap-foil-effect{display:none}
+.recap-foil-effect>span,.recap-effect-texture::before,.recap-effect-sweep::before{position:absolute;inset:0;pointer-events:none}
+.recap-effect-texture,.recap-effect-sweep{mask:var(--effect-texture) center/100% 100% no-repeat;mix-blend-mode:screen}
+/* Neutral tooling light preserves material colours between the brightest catches. */
+.recap-effect-texture::before{content:"";background-image:linear-gradient(calc(115deg + var(--foil-angle,0deg)),#242424 20%,#666 40%,#f5f5f5 49%,#aaa 54%,#242424 72%),linear-gradient(100deg,var(--effect-colors,var(--foil-colors)));background-size:220% 160%,180% 180%;background-position:var(--reflection-x,50%) var(--reflection-y,50%),var(--tint-x,50%) var(--tint-y,50%);background-blend-mode:multiply;opacity:calc(.65 + var(--foil-catch,.5)*.35)}
+/* A dark reflection next to the highlight gives the engraving depth, without screening it away. */
+.recap-effect-relief{background:linear-gradient(calc(115deg + var(--foil-angle,0deg)),transparent 28%,#020611b3 43%,transparent 55%);background-size:220% 160%;background-position:var(--reflection-x,50%) var(--reflection-y,50%);opacity:.45}
+.recap-effect-gleam{background:linear-gradient(calc(115deg + var(--foil-angle,0deg)),transparent 40%,#b4d3e240 47%,#f2faff 50%,#bbcddd50 53%,transparent 61%);background-size:220% 160%;background-position:var(--reflection-x,50%) var(--reflection-y,50%);mix-blend-mode:screen;opacity:var(--effect-gleam,.12)}
+/* Engravings rotate their glints around the tooling origin. */
+.recap-card.recap-collectible:is([data-effect=engraved],[data-effect=engraved-lettering]) .recap-effect-texture::before{background-image:conic-gradient(from calc(25deg + var(--foil-angle,0deg)*4) at var(--effect-center),#242424 0deg,#666 28deg,#fafafa 43deg,#999 52deg,#242424 78deg,#242424 185deg,#eee 218deg,#242424 245deg,#242424 360deg),linear-gradient(calc(100deg + var(--foil-angle,0deg)),var(--effect-colors,var(--foil-colors)));background-size:100% 100%,180% 180%;background-position:center,var(--tint-x,50%) var(--tint-y,50%)}
+.recap-card.recap-collectible:is([data-effect=engraved],[data-effect=engraved-lettering]) .recap-effect-gleam{background:conic-gradient(from calc(25deg + var(--foil-angle,0deg)*4) at var(--effect-center),transparent 29deg,#e8f6ff99 41deg,#fff 43deg,#b8d2dc66 46deg,transparent 59deg,transparent 207deg,#e8f6ff80 217deg,#fff 219deg,transparent 230deg);opacity:.16}
+.recap-card.recap-collectible:is([data-effect=engraved],[data-effect=engraved-lettering]) .recap-effect-relief{background:conic-gradient(from calc(25deg + var(--foil-angle,0deg)*4) at var(--effect-center),transparent 0deg,#020611b3 23deg,transparent 43deg,transparent 170deg,#020611b3 201deg,transparent 220deg);opacity:.5}
+.recap-effect-sweep{opacity:0}
+.recap-effect-sweep::before{content:"";background:linear-gradient(115deg,transparent 35%,#b9deeb 47%,#fff 50%,#b9deeb 53%,transparent 65%);background-size:250% 160%}
+@media(prefers-reduced-motion:no-preference){
+  .recap-card.recap-collectible.rarity-reveal:is([data-effect=engraved],[data-effect=engraved-lettering]) .recap-effect-sweep{animation:recap-effect-reveal 1.8s .3s ease-out both}
+  .recap-card.recap-collectible.rarity-reveal:is([data-effect=engraved],[data-effect=engraved-lettering]) .recap-effect-sweep::before{animation:recap-effect-light 1.8s .3s ease-out both}
+  @keyframes recap-effect-reveal{0%,100%{opacity:0}20%,65%{opacity:.9}}
+  @keyframes recap-effect-light{from{background-position:100% 50%}to{background-position:0% 50%}}
+}
+/* Selective foil catches on printed details. Lettering only decorates headings and key values. */
+.recap-card.recap-collectible:is([data-effect=lettering],[data-effect=pearl-lettering],[data-effect=engraved-lettering]){--effect-print-wash:calc(.9 - var(--foil-strength,.7)*.22);--effect-print:linear-gradient(90deg,transparent 28%,#fff9 32%,transparent 37%,transparent 60%,#fffc 64%,transparent 69%),linear-gradient(110deg,var(--effect-colors,var(--foil-colors)))}
+.recap-card.recap-collectible[data-effect=lettering]{--effect-print-wash:calc(.94 - var(--foil-strength,.7)*.14)}
+.recap-card.recap-collectible[data-effect=pearl-lettering]{--effect-print-wash:calc(.94 - var(--foil-strength,.7)*.1)}
+@media(prefers-reduced-motion:no-preference){
+  .recap-card.recap-collectible:is([data-effect=pearl-lettering],[data-effect=engraved-lettering]).rarity-reveal{--effect-print-animation:recap-effect-print 1.8s .3s ease-out}
+  @keyframes recap-effect-print{0%{background-position:center,100% center,100% center}60%{background-position:center,0% center,0% center}100%{background-position:center,var(--reflection-x,50%) center,var(--tint-x,50%) center}}
+}
+.recap-motion-permission{position:absolute;bottom:0;left:50%;transform:translateX(-50%);max-width:95%;width:max-content;font-size:.72rem;padding:.35rem .65rem;z-index:3}
+.recap-motion-permission[hidden]{display:none}
+
+/* Mark custom text and rules with data-foil-text and data-foil-line. */
+.recap-card.recap-collectible[data-effect=lettering] :is([data-foil-text],.recap-card-content>h3,.recap-value),
+.recap-card.recap-collectible:is([data-effect=pearl-lettering],[data-effect=engraved-lettering]) :is([data-foil-text],.recap-card-content>h3,.recap-value,.recap-card-header>span:first-child,.recap-card-footer>span){background-image:linear-gradient(rgb(234 243 255 / var(--effect-print-wash)),rgb(234 243 255 / var(--effect-print-wash))),var(--effect-print);background-size:100% 100%,220% 100%,180% 100%;background-position:center,var(--reflection-x,50%) center,var(--tint-x,50%) center;background-color:#eaf3ff;background-clip:text;-webkit-background-clip:text;color:transparent;text-shadow:none;animation:var(--effect-print-animation,none)}
+.recap-card.recap-collectible[data-effect=engraved-lettering] :is([data-foil-text],.recap-card-content>h3,.recap-value){--effect-print-wash:calc(.82 - var(--foil-strength,.7)*.24)}
+.recap-card.recap-collectible:is([data-effect=lettering],[data-effect=pearl-lettering],[data-effect=engraved-lettering]) [data-foil-line]{background-image:linear-gradient(rgb(234 243 255 / var(--effect-print-wash)),rgb(234 243 255 / var(--effect-print-wash))),var(--effect-print);background-size:100% 100%,220% 100%,180% 100%;background-position:center,var(--reflection-x,50%) center,var(--tint-x,50%) center;opacity:calc(var(--foil-strength,.7)*.45);animation:var(--effect-print-animation,none)}
+@media(prefers-reduced-motion:reduce){:where(.pack-cards,.recap-pack-scene,.recap-deck-stage,.recap-card-flight,.recap-pack-flight,.recap-collection) *{animation:none!important;transition:none!important}}

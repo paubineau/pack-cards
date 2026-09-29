@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#fff" stroke-width=".5" stroke-linecap="butt">
+  <!-- Original seamless guilloche foil: close, shallow ridges with no crossings or closed loops. -->
+  <!-- Matching ridges at y=0 and y=80 preserve the vertical seam; every curve has matching end tangents. -->
+  <path d="M0 0C10 -2.4 30 -2.4 40 0S70 2.4 80 0" opacity=".78"/>
+  <path d="M0 2.5C10 0.1 30 0.1 40 2.5S70 4.9 80 2.5" opacity=".62"/>
+  <path d="M0 5C10 2.6 30 2.6 40 5S70 7.4 80 5" opacity=".62"/>
+  <path d="M0 7.5C10 5.1 30 5.1 40 7.5S70 9.9 80 7.5" opacity=".62"/>
+  <path d="M0 10C10 7.6 30 7.6 40 10S70 12.4 80 10" opacity=".78"/>
+  <path d="M0 12.5C10 10.1 30 10.1 40 12.5S70 14.9 80 12.5" opacity=".62"/>
+  <path d="M0 15C10 12.6 30 12.6 40 15S70 17.4 80 15" opacity=".62"/>
+  <path d="M0 17.5C10 15.1 30 15.1 40 17.5S70 19.9 80 17.5" opacity=".62"/>
+  <path d="M0 20C10 17.6 30 17.6 40 20S70 22.4 80 20" opacity=".78"/>
+  <path d="M0 22.5C10 20.1 30 20.1 40 22.5S70 24.9 80 22.5" opacity=".62"/>
+  <path d="M0 25C10 22.6 30 22.6 40 25S70 27.4 80 25" opacity=".62"/>
+  <path d="M0 27.5C10 25.1 30 25.1 40 27.5S70 29.9 80 27.5" opacity=".62"/>
+  <path d="M0 30C10 27.6 30 27.6 40 30S70 32.4 80 30" opacity=".78"/>
+  <path d="M0 32.5C10 30.1 30 30.1 40 32.5S70 34.9 80 32.5" opacity=".62"/>
+  <path d="M0 35C10 32.6 30 32.6 40 35S70 37.4 80 35" opacity=".62"/>
+  <path d="M0 37.5C10 35.1 30 35.1 40 37.5S70 39.9 80 37.5" opacity=".62"/>
+  <path d="M0 40C10 37.6 30 37.6 40 40S70 42.4 80 40" opacity=".78"/>
+  <path d="M0 42.5C10 40.1 30 40.1 40 42.5S70 44.9 80 42.5" opacity=".62"/>
+  <path d="M0 45C10 42.6 30 42.6 40 45S70 47.4 80 45" opacity=".62"/>
+  <path d="M0 47.5C10 45.1 30 45.1 40 47.5S70 49.9 80 47.5" opacity=".62"/>
+  <path d="M0 50C10 47.6 30 47.6 40 50S70 52.4 80 50" opacity=".78"/>
+  <path d="M0 52.5C10 50.1 30 50.1 40 52.5S70 54.9 80 52.5" opacity=".62"/>
+  <path d="M0 55C10 52.6 30 52.6 40 55S70 57.4 80 55" opacity=".62"/>
+  <path d="M0 57.5C10 55.1 30 55.1 40 57.5S70 59.9 80 57.5" opacity=".62"/>
+  <path d="M0 60C10 57.6 30 57.6 40 60S70 62.4 80 60" opacity=".78"/>
+  <path d="M0 62.5C10 60.1 30 60.1 40 62.5S70 64.9 80 62.5" opacity=".62"/>
+  <path d="M0 65C10 62.6 30 62.6 40 65S70 67.4 80 65" opacity=".62"/>
+  <path d="M0 67.5C10 65.1 30 65.1 40 67.5S70 69.9 80 67.5" opacity=".62"/>
+  <path d="M0 70C10 67.6 30 67.6 40 70S70 72.4 80 70" opacity=".78"/>
+  <path d="M0 72.5C10 70.1 30 70.1 40 72.5S70 74.9 80 72.5" opacity=".62"/>
+  <path d="M0 75C10 72.6 30 72.6 40 75S70 77.4 80 75" opacity=".62"/>
+  <path d="M0 77.5C10 75.1 30 75.1 40 77.5S70 79.9 80 77.5" opacity=".62"/>
+  <path d="M0 80C10 77.6 30 77.6 40 80S70 82.4 80 80" opacity=".78"/>
+</svg>

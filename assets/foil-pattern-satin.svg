@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#fff" stroke-linecap="butt">
+  <!-- Original seamless brushed foil: fine horizontal cuts, with varied interruptions. -->
+  <path d="M0 2H13M20 2H45M53 2H80" stroke-width=".55" opacity=".72"/>
+  <path d="M0 6H24M29 6H49M58 6H80" stroke-width=".45" opacity=".58"/>
+  <path d="M0 10H8M16 10H40M47 10H80" stroke-width=".45" opacity=".66"/>
+  <path d="M0 14H18M23 14H53M62 14H80" stroke-width=".55" opacity=".8"/>
+  <path d="M0 18H11M18 18H49M56 18H80" stroke-width=".45" opacity=".62"/>
+  <path d="M0 22H20M26 22H45M54 22H80" stroke-width=".45" opacity=".72"/>
+  <path d="M0 26H7M13 26H38M45 26H80" stroke-width=".55" opacity=".58"/>
+  <path d="M0 30H16M24 30H54M60 30H80" stroke-width=".45" opacity=".66"/>
+  <path d="M0 34H25M31 34H48M57 34H80" stroke-width=".45" opacity=".8"/>
+  <path d="M0 38H10M18 38H39M47 38H80" stroke-width=".55" opacity=".62"/>
+  <path d="M0 42H22M29 42H53M60 42H80" stroke-width=".45" opacity=".72"/>
+  <path d="M0 46H15M20 46H43M52 46H80" stroke-width=".45" opacity=".58"/>
+  <path d="M0 50H6M14 50H45M51 50H80" stroke-width=".55" opacity=".66"/>
+  <path d="M0 54H19M26 54H50M56 54H80" stroke-width=".45" opacity=".8"/>
+  <path d="M0 58H12M17 58H40M48 58H80" stroke-width=".45" opacity=".62"/>
+  <path d="M0 62H23M30 62H52M61 62H80" stroke-width=".55" opacity=".72"/>
+  <path d="M0 66H9M16 66H42M49 66H80" stroke-width=".45" opacity=".58"/>
+  <path d="M0 70H17M23 70H47M55 70H80" stroke-width=".45" opacity=".66"/>
+  <path d="M0 74H26M32 74H55M63 74H80" stroke-width=".55" opacity=".8"/>
+  <path d="M0 78H14M21 78H39M46 78H80" stroke-width=".45" opacity=".62"/>
+</svg>
