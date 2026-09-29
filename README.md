@@ -4,12 +4,33 @@ Framework-independent collectible cards and pack opening for the browser. The
 core is plain JavaScript and CSS with no runtime dependencies. An optional,
 lazy-loaded WebGL renderer includes React internally; consumers do not need React.
 
-This repository is self-contained and can also be consumed as a local package.
+This repository is self-contained and can be installed directly from GitHub.
 It does not call a backend, require application globals, load
-Twitch assets, or store user data. The package name is provisional; registry
-availability has not been checked. Original-source licensing is awaiting the
-owner's choice (`UNLICENSED` in package.json); select a license before publishing.
+Twitch assets, or store user data. JavaScript and TypeScript applications use the
+same ES module API; declarations are included. The package is intentionally
+`private: true` to prevent accidental npm publication; this does not prevent Git
+installation or determine GitHub repository visibility. Original-source licensing
+is awaiting the owner's choice (`UNLICENSED` in package.json).
 Dependency notices are in [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt).
+
+## Install from GitHub
+
+Replace `<commit>` with the full commit SHA you want to consume:
+
+```sh
+npm install --save-exact "git+https://github.com/paubineau/pack-cards.git#<commit>"
+```
+
+Commit your application's `package.json` and lockfile, then use `npm ci` in CI
+and Docker builds. A private GitHub repository requires Git credentials on each
+machine that installs it. No npm account or registry publication is needed.
+Updates are deliberate: change the pinned commit, refresh the lockfile, rebuild
+the app's assets and run its integration checks. The checked-in `renderer.js`
+contains its dependencies, so consumers do not install React or rebuild it.
+
+For local library development, a consumer can temporarily install a local path
+with `npm install ../pack-cards`. Restore the pinned GitHub dependency before
+committing the consumer's manifest and lockfile so CI can reproduce its install.
 
 ## Try it
 
@@ -37,6 +58,32 @@ npm run build:renderer
 Load `styles.css` once, alongside your own page styles. Relative `assets/` URLs
 must remain beside it. With a bundler, import `pack-cards/styles.css`; with native
 modules, use a stylesheet link and import `./index.js` from your served copy.
+
+For a browser bundler such as Vite, the library entry is:
+
+```js
+import {createPackCards, normalizeAppearance} from 'pack-cards';
+import 'pack-cards/styles.css';
+
+const cards = createPackCards();
+const appearance = normalizeAppearance({version: 5, motion: 'interactive'});
+// Use cards.mountPack(host, {appearance, onOpen}) when the host is mounted.
+```
+
+The bundler must handle CSS asset URLs and the dynamic renderer import. Module
+subpaths `pack-cards/appearance`, `pack-cards/presentation`,
+`pack-cards/export-material` and `pack-cards/renderer` have matching TypeScript
+declarations. Use TypeScript's `bundler`, `node16` or `nodenext` module resolution.
+The package is ESM; it does not provide a CommonJS build or framework wrapper.
+
+For native browser modules, serve the root `*.js` modules, `styles.css` and the
+entire `assets/` directory together, retaining their relative paths. The following
+example assumes they are available under `./pack-cards/`; serving `node_modules`
+directly is unnecessary. For a custom build that copies assets, Node's
+`createRequire(import.meta.url).resolve('pack-cards')` locates the library entry.
+CSS, individual `pack-cards/assets/*` files, `pack-cards/renderer`
+and `pack-cards/THIRD_PARTY_LICENSES.txt` are also resolvable export paths. These
+files are build inputs; browsers do not fetch anything from GitHub at runtime.
 
 ```html
 <link rel="stylesheet" href="./pack-cards/styles.css">
@@ -83,6 +130,11 @@ in a deck and adds material layers; it does not interpret card data or HTML.
 Create a fresh face when mounting a new deck. Dispose the previous mount before
 replacing it. `dispose` cancels listeners, sensors, pending callbacks and motion;
 the caller owns removing/replacing the containing DOM.
+
+In a framework, create/mount the instance after the host element exists, and call
+the disposer on unmount or before replacing the card or pack. Importing the core
+and using appearance helpers is safe during server rendering; DOM and canvas
+methods must run in the browser. No application state is stored by the package.
 
 ## Features and boundaries
 
@@ -219,10 +271,18 @@ high-level package already does this. Source and guarded adaptations are in
 
 ## Publication and provenance
 
-Run `npm test` and `npm pack --dry-run` before publishing. This repository has no
+Run `npm test` and `npm pack --dry-run` before distributing an update. Check the
+TypeScript consumer fixture with:
+
+```sh
+npm exec --yes --package=typescript@5.9.3 -- tsc --noEmit --strict --module NodeNext --target ES2020 tests/types.test.ts
+```
+
+This command downloads a compiler into npm's cache without adding a library
+dependency. This repository has no
 parent-directory build dependencies. Check in the
 renderer output and its notices after rebuilding. No publication or registry
-reservation is performed by this extraction.
+reservation is performed. npm publication remains disabled by `private: true`.
 
 The WebGL tear is adapted from `cardpack-webgl` revision
 `d3243641b53b2679902c9263554bfdcdef4e4c3d` (MIT); React, ReactDOM and scheduler are

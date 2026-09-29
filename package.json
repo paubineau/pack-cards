@@ -1,18 +1,23 @@
 {
   "name": "pack-cards",
   "version": "0.1.0",
+  "private": true,
   "description": "Framework-independent collectible cards, materials and optional WebGL pack opening",
   "type": "module",
+  "types": "./index.d.ts",
   "license": "UNLICENSED",
   "exports": {
-    ".": "./index.js",
-    "./appearance": "./appearance.js",
-    "./presentation": "./presentation.js",
-    "./export-material": "./export-material.js",
-    "./styles.css": "./styles.css",
-    "./renderer": "./renderer.js"
+    ".": {"types": "./index.d.ts", "default": "./index.js"},
+    "./appearance": {"types": "./appearance.d.ts", "default": "./appearance.js"},
+    "./presentation": {"types": "./presentation.d.ts", "default": "./presentation.js"},
+    "./export-material": {"types": "./export-material.d.ts", "default": "./export-material.js"},
+    "./styles.css": {"types": "./styles.d.ts", "default": "./styles.css"},
+    "./renderer": {"types": "./renderer.d.ts", "default": "./renderer.js"},
+    "./assets/*": "./assets/*",
+    "./THIRD_PARTY_LICENSES.txt": "./THIRD_PARTY_LICENSES.txt",
+    "./package.json": "./package.json"
   },
-  "files": ["*.js", "styles.css", "assets", "renderer", "examples", "tests", "README.md", "LICENSE", "THIRD_PARTY_LICENSES.txt"],
+  "files": ["*.js", "*.d.ts", "styles.css", "assets", "renderer", "examples", "tests", "README.md", "LICENSE", "THIRD_PARTY_LICENSES.txt"],
   "scripts": {
     "test": "node --test tests/*.test.mjs",
     "build:renderer": "npm --prefix renderer run build"
