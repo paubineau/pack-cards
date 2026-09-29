@@ -5,7 +5,7 @@
   "description": "Framework-independent collectible cards, materials and optional WebGL pack opening",
   "type": "module",
   "types": "./index.d.ts",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "exports": {
     ".": {"types":"./index.d.ts","default":"./index.js"},
     "./appearance": {"types":"./appearance.d.ts","default":"./appearance.js"},

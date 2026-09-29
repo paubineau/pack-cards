@@ -17,6 +17,7 @@ const types = {
   '.svg': 'image/svg+xml', '.json': 'application/json; charset=utf-8',
   '.md': 'text/plain; charset=utf-8', '.txt': 'text/plain; charset=utf-8',
   '.png': 'image/png', '.gif': 'image/gif', '.jpg': 'image/jpeg', '.webp': 'image/webp',
+  '.mp4': 'video/mp4',
 };
 const server = createServer(async (request, response) => {
   response.setHeader('Cache-Control', 'no-store');

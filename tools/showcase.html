@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pack Cards — recording composition</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../examples/demo.css">
+  <style>
+    html,body{width:960px;height:720px;overflow:hidden}
+    #showcase{position:relative;width:960px;height:720px;max-width:none;margin:0;padding:0;overflow:hidden;background:radial-gradient(ellipse at 58% 46%,#29423f 0%,#172b2e 42%,#0c171c 82%)}
+    .showcase-brand{position:absolute;left:48px;top:34px;display:flex;align-items:center;gap:11px;color:#a8dbcb;font-size:18px;font-weight:550;letter-spacing:-.03em}
+    .showcase-brand span{font-size:28px;font-weight:400}
+    #showcase-stage{position:absolute;left:270px;top:92px;width:620px;height:576px}
+    #showcase-stage>.recap-pack-scene{height:100%;min-height:0;padding:0;gap:0;overflow:visible;--pack-cards-default-width:330px}
+    #showcase-stage .recap-pack-scene>.eyebrow,#showcase-stage .recap-pack-title,#showcase-stage .recap-pack-skip,#showcase-stage .recap-pack-instruction{display:none}
+    #showcase-stage .recap-pack-stack{margin:0}
+    #showcase-stage .recap-deck-stage{min-height:100%;padding:0}
+    #showcase-stage .recap-deck{width:330px}
+    #showcase-pile{position:absolute;left:142px;top:477px;width:140px;height:180px}
+    #showcase-pile .recap-collection{--pile-width:100;--pile-height:calc(100*88/63);position:relative;left:auto;top:auto;width:140px;height:180px;margin:0;transform:none}
+    #showcase-pile .recap-pile-visual,#showcase-pile .recap-pile-button{left:20px;top:14px}
+    #showcase .demo-card .recap-card-header{font-size:10px}
+    #showcase .demo-card .recap-card-footer{font-size:9px}
+    #showcase .demo-symbol{font-size:84px}
+  </style>
+  <script type="module" src="./showcase.js"></script>
+</head>
+<body data-card="pack">
+  <main id="showcase" aria-label="Pack Cards showcase">
+    <div class="showcase-brand"><span aria-hidden="true">◇</span> pack-cards</div>
+    <div id="showcase-stage" class="pack-cards"></div>
+    <div id="showcase-pile" class="pack-cards"></div>
+  </main>
+</body>
+</html>

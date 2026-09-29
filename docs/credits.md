@@ -2,9 +2,27 @@
 
 [Back to the README](../README.md)
 
-**Original code is currently `UNLICENSED`.** A license has not yet been selected;
-the public repository does not currently grant an open-source license for that
-code.
+## License scope
+
+Pack Cards' original code, documentation, examples, and assets are licensed under
+the **[MIT License](../LICENSE)**. It permits use, modification, and redistribution,
+including commercial and closed-source use, provided the copyright and license
+notices are retained. It does not require publication of source code. The license
+includes a warranty and liability disclaimer. See the
+[official license text](https://opensource.org/license/mit).
+
+Existing third-party code retains its own license:
+
+| Files | License | Notice |
+| --- | --- | --- |
+| Original project files, except the components below | MIT | [LICENSE](../LICENSE) |
+| Adapted `renderer/` source and generated `renderer.js` | MIT | [Renderer license](../renderer/LICENSE) and [distributed notice](../THIRD_PARTY_LICENSES.txt) |
+| Bundled `vendor/gifenc/` encoder | MIT | [gifenc license](../vendor/gifenc/LICENSE.md) |
+
+The package metadata uses the SPDX identifier **`MIT`**. Keep the original
+copyright and permission notices when redistributing third-party components;
+the root license does not replace those notices or change the licenses of the
+reference projects credited below.
 
 ## Pack opening: 2manslkh
 

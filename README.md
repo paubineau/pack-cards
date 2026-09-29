@@ -4,6 +4,12 @@ Collectible cards and interactive pack opening for the web. Give the library
 ordinary DOM elements for your card faces; it adds the wrapper, reveal animation,
 materials, and interaction.
 
+[![Watch Pack Cards: a pack opens, cards catch the light, and the legendary Sun joins the collection.](media/showcase.jpg)](media/showcase.mp4)
+
+[▶ Watch the short showcase](media/showcase.mp4) — pack opening, reflective
+cards, and an animated collection, including a legendary card.
+[Try the examples](#try-it).
+
 **Plain JavaScript and CSS. No React or external runtime dependencies.** Works
 with a framework or without one, and includes TypeScript declarations. The
 WebGL pack renderer loads only when needed.
@@ -159,6 +165,10 @@ source revisions, adaptation details, and third-party notices.
 
 ## License
 
-Original code is currently **UNLICENSED**: the public repository does not yet
-grant an open-source license. The adapted WebGL renderer and bundled GIF encoder
-carry MIT notices. See [license and credits](docs/credits.md) for details.
+Pack Cards uses the **[MIT License](LICENSE)**. You can use, modify, and
+redistribute it, including in commercial and closed-source projects, provided
+you retain the copyright and license notices.
+
+The adapted WebGL renderer and bundled GIF encoder also use MIT and retain their
+original copyright notices. See [license and credits](docs/credits.md) for the
+file-by-file scope and notices.
