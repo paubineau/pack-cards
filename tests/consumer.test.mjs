@@ -19,6 +19,14 @@ test('consumer entry points preserve named and compatibility exports without a D
   assert.equal(cards.resolveAppearance, appearance.resolveRecapAppearance);
   assert.equal(cards.createExportCard, materials.recapExportCard);
   assert.equal(cards.drawExportStock, materials.drawRecapExportStock);
+  assert.equal(cards.normalizeAppearance, appearance.normalizeAppearance);
+  assert.equal(cards.resolveAppearance, appearance.resolveAppearance);
+  assert.equal(cards.resolveAppearances, appearance.resolveAppearances);
+  assert.equal(cards.appearanceDefaults, appearance.appearanceDefaults);
+  assert.equal(cards.appearanceChoices, appearance.appearanceChoices);
+  assert.equal(cards.createExportCard, materials.createExportCard);
+  assert.equal(cards.drawExportStock, materials.drawExportStock);
+  assert.equal(cards.drawExportMaterial, materials.drawExportMaterial);
   assert.equal(typeof globalThis.document, 'undefined');
 });
 

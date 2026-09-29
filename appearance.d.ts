@@ -87,3 +87,7 @@ export function recapObject(value: unknown): Record<string, unknown>;
 export function recapChoice<T extends string, F>(value: unknown, choices: readonly T[], fallback: F): T | F;
 export function recapAppearanceTarget(settings: DeepReadonly<AppearanceSettings>, rarity: string | null | undefined): Rarity | 'card';
 export function resolveRecapProfile(settings: DeepReadonly<AppearanceSettings>, profile: DeepReadonly<MaterialProfile>, identity: unknown, select: <K extends MaterialComponent>(choices: readonly MaterialComponents[K][], axis: K) => MaterialComponents[K]): ResolvedAppearance;
+/** Preferred names; recap-prefixed exports remain available for compatibility. */
+export {recapAppearanceDefaults as appearanceDefaults, recapAppearanceChoices as appearanceChoices,
+  normalizeRecapAppearance as normalizeAppearance, resolveRecapAppearance as resolveAppearance,
+  resolveRecapAppearances as resolveAppearances};

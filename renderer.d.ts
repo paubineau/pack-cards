@@ -17,5 +17,5 @@ export interface RendererOptions {
   onComplete?: () => void;
 }
 export interface RendererDisposer {(): void; setBodyArtwork(url: string): void}
-/** Mount in the browser; defer disposal until outside renderer callbacks. */
+/** Mount in the browser. Disposal is idempotent and may run inside callbacks. */
 export function mountPack(host: HTMLElement, options: RendererOptions): RendererDisposer;

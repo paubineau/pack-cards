@@ -1,16 +1,19 @@
 // Viewed-card piles are visual state; the consumer owns card order and navigation.
 export function createCardPile({count=0,placements,renderBack,onPrevious=()=>{},
   previousLabel=position=>`Review card ${position}`,emptyLabel='No viewed cards',
-  createElement=(tag,text,className)=>{
-    const node=document.createElement(tag);
+  createElement}={}) {
+  let element;
+  createElement ||= (tag,text,className)=>{
+    const node=(element?.ownerDocument || globalThis.document).createElement(tag);
     if(text!=null)node.textContent=text;
     if(className)node.className=className;
     return node;
-  }}={}) {
+  };
   if(!Number.isSafeInteger(count)||count<0)throw new RangeError('count must be a non-negative safe integer');
   if(typeof renderBack!=='function')throw new TypeError('renderBack must return a fresh card back');
   const poses=placements || Array.from({length:count},()=>({rotation:(Math.random()-.5)*16,x:(Math.random()-.5)*4,y:(Math.random()-.5)*4}));
-  const element=createElement('div',null,'recap-collection'),visual=createElement('div',null,'recap-pile-visual');
+  element=createElement('div',null,'recap-collection');
+  const visual=createElement('div',null,'recap-pile-visual');
   visual.setAttribute('aria-hidden','true'); visual.inert=true;
   const previous=createElement('button',null,'recap-pile-button'); previous.type='button';
   let position=0,disposed=false,cancelAnimation=null;
@@ -43,11 +46,12 @@ export function createCardPile({count=0,placements,renderBack,onPrevious=()=>{},
     isActive=()=>true,onFinish=()=>{}}) {
     cancelAnimation?.();
     if(disposed)return null;
+    const doc=container.ownerDocument || element.ownerDocument || globalThis.document;
+    const window=doc?.defaultView || globalThis.window;
     const preference=window.matchMedia('(prefers-reduced-motion: reduce)');
     const destination=direction>0 ? visual.getBoundingClientRect() : origin;
     if(preference.matches || !isActive() || !face || !bounds?.width || !bounds.height || !destination?.width)return null;
     const landing=direction>0 ? visual.lastElementChild : null;
-    const doc=container.ownerDocument || document;
     const restoreFocus=doc.activeElement===current;
     const turnInert=turn?.inert,turnVisibility=turn?.style.visibility,landingVisibility=landing?.style.visibility;
     if(landing)landing.style.visibility='hidden';
@@ -67,7 +71,7 @@ export function createCardPile({count=0,placements,renderBack,onPrevious=()=>{},
     let finished=false,timer;
     const cancel=()=>{
       if(finished)return;
-      finished=true;clearTimeout(timer);preference.removeEventListener?.('change',preferenceChanged);
+      finished=true;window.clearTimeout(timer);preference.removeEventListener?.('change',preferenceChanged);
       if(cancelAnimation===cancel)cancelAnimation=null;
       flight.remove();
       if(landing)landing.style.visibility=landingVisibility || '';
@@ -78,7 +82,7 @@ export function createCardPile({count=0,placements,renderBack,onPrevious=()=>{},
     };
     function preferenceChanged(){if(preference.matches)cancel();}
     cancelAnimation=cancel;
-    timer=setTimeout(cancel,680);
+    timer=window.setTimeout(cancel,680);
     preference.addEventListener?.('change',preferenceChanged);
     return cancel;
   }

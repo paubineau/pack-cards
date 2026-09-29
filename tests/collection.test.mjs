@@ -69,3 +69,31 @@ test('reduced motion skips a deal without pending effects',t=>{
     bounds:{left:0,top:0,width:180,height:250},onFinish:()=>finished++}),null);
   assert.equal(timers.size,0);assert.equal(finished,0);
 });
+
+test('pile deals use the containing document for motion, timers and focus',t=>{
+  const primary=installDOM(t),embedded=installDOM(t,{reduced:true,installGlobals:false}),host=embedded.host();
+  const createElement=(tag,text,className)=>{
+    const node=embedded.document.createElement(tag);
+    if(text!=null)node.textContent=text;
+    if(className)node.className=className;
+    return node;
+  };
+  const pile=createCardPile({count:1,createElement,renderBack:()=>createElement('span')});
+  host.append(pile.element);embedded.cleanup(pile.dispose);
+  pile.update(1,new Map([[0,{width:180,height:250}]]));
+  const current=createElement('article');host.append(current);current.focus();
+  const options={container:host,direction:1,face:createElement('article'),current,bounds:{left:0,top:0,width:180,height:250}};
+  assert.equal(pile.animate(options),null);
+  const preference=embedded.window.matchMedia('(prefers-reduced-motion: reduce)');
+  preference.matches=false;
+  pile.animate(options);
+  assert.equal(embedded.timers.size,1);
+  assert.equal(primary.timers.size,0);
+  assert.equal(host.querySelector('.recap-card-flight').ownerDocument,embedded.document);
+  embedded.document.activeElement=embedded.document.body;
+  embedded.runTimers();
+  assert.equal(embedded.document.activeElement,current);
+  assert.equal(primary.document.activeElement,null);
+  assert.equal(preference.listenerCount('change'),0);
+  assert.equal(primary.media.size,0);
+});

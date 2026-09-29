@@ -25,3 +25,6 @@ export function recapExportInk(ctx: CanvasRenderingContext2D, accent: string, ap
 export function drawRecapExportStock(ctx: CanvasRenderingContext2D, artwork?: Artwork, appearance?: Appearance): void;
 /** Draws in 1080 by 1440 coordinates; requires an available 2D canvas context. */
 export function recapExportCard(canvas: HTMLCanvasElement, artwork?: Artwork, options?: ExportCardOptions): ExportCardFrame;
+/** Preferred names; recap-prefixed exports remain available for compatibility. */
+export {recapExportCard as createExportCard, drawRecapExportStock as drawExportStock,
+  drawRecapExportMaterial as drawExportMaterial};

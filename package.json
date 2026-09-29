@@ -7,28 +7,32 @@
   "types": "./index.d.ts",
   "license": "UNLICENSED",
   "exports": {
-    ".": {"types": "./index.d.ts", "default": "./index.js"},
-    "./appearance": {"types": "./appearance.d.ts", "default": "./appearance.js"},
-    "./presentation": {"types": "./presentation.d.ts", "default": "./presentation.js"},
-    "./export-material": {"types": "./export-material.d.ts", "default": "./export-material.js"},
-    "./collection": {"types": "./collection.d.ts", "default": "./collection.js"},
-    "./editor": {"types": "./editor.d.ts", "default": "./editor.js"},
-    "./snapshots": {"types": "./snapshots.d.ts", "default": "./snapshots.js"},
-    "./gif": {"types": "./gif.d.ts", "default": "./gif.js"},
+    ".": {"types":"./index.d.ts","default":"./index.js"},
+    "./appearance": {"types":"./appearance.d.ts","default":"./appearance.js"},
+    "./presentation": {"types":"./presentation.d.ts","default":"./presentation.js"},
+    "./export-material": {"types":"./export-material.d.ts","default":"./export-material.js"},
+    "./collection": {"types":"./collection.d.ts","default":"./collection.js"},
+    "./editor": {"types":"./editor.d.ts","default":"./editor.js"},
+    "./snapshots": {"types":"./snapshots.d.ts","default":"./snapshots.js"},
+    "./gif": {"types":"./gif.d.ts","default":"./gif.js"},
     "./gif-worker.js": "./gif-worker.js",
-    "./editor.css": {"types": "./styles.d.ts", "default": "./editor.css"},
-    "./snapshots.css": {"types": "./styles.d.ts", "default": "./snapshots.css"},
-    "./styles.css": {"types": "./styles.d.ts", "default": "./styles.css"},
-    "./renderer": {"types": "./renderer.d.ts", "default": "./renderer.js"},
+    "./editor.css": {"types":"./styles.d.ts","default":"./editor.css"},
+    "./snapshots.css": {"types":"./styles.d.ts","default":"./snapshots.css"},
+    "./styles.css": {"types":"./styles.d.ts","default":"./styles.css"},
+    "./renderer": {"types":"./renderer.d.ts","default":"./renderer.js"},
     "./assets/*": "./assets/*",
     "./THIRD_PARTY_LICENSES.txt": "./THIRD_PARTY_LICENSES.txt",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./base.css": {"types":"./styles.d.ts","default":"./base.css"},
+    "./theme.css": {"types":"./styles.d.ts","default":"./theme.css"}
   },
-  "files": ["*.js", "*.d.ts", "*.css", "assets", "renderer", "vendor", "examples", "tests", "README.md", "LICENSE", "THIRD_PARTY_LICENSES.txt"],
+  "files": ["*.js","*.d.ts","*.css","assets","presentation","renderer","vendor","examples","tests","README.md","LICENSE","THIRD_PARTY_LICENSES.txt"],
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "build:renderer": "npm --prefix renderer run build"
+    "build:renderer": "npm --prefix renderer run build",
+    "test:browser": "node --test --test-concurrency=1 tests/browser/*.test.mjs"
   },
-  "sideEffects": ["./styles.css", "./editor.css", "./snapshots.css", "./gif-worker.js"],
-  "engines": {"node": ">=22.12"}
+  "sideEffects": ["./styles.css","./base.css","./theme.css","./editor.css","./snapshots.css","./gif-worker.js"],
+  "engines": {"node":">=22.12"},
+  "devDependencies": {"playwright":"1.62.1"}
 }

@@ -190,3 +190,7 @@ export {
   recapAccentHsl,
   recapFoilColors
 };
+// Stable names for consumers of the focused appearance entry point.
+export {recapAppearanceDefaults as appearanceDefaults, recapAppearanceChoices as appearanceChoices,
+  normalizeRecapAppearance as normalizeAppearance, resolveRecapAppearance as resolveAppearance,
+  resolveRecapAppearances as resolveAppearances};

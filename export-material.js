@@ -214,3 +214,6 @@ function recapExportCard(canvas,artwork={},options={}) {
 }
 
 export {recapExportMaterialColors, recapExportMaterialGradient, drawRecapExportMaterial, recapExportInk, drawRecapExportStock, recapExportCard};
+// Stable names for consumers of the focused canvas entry point.
+export {recapExportCard as createExportCard, drawRecapExportStock as drawExportStock,
+  drawRecapExportMaterial as drawExportMaterial};

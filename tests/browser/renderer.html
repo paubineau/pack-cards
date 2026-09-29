@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renderer contract fixture</title>
+<link rel="stylesheet" href="/library/styles.css">
+<style>
+  body { margin: 0; background: #101824; color: #edf1f8; }
+  #scene { position: relative; isolation: isolate; width: 270px; height: 360px; margin: 120px auto; }
+  #back, #host { position: absolute; inset: 0; }
+  #back { z-index: 0; } #host { z-index: 1; }
+</style>
+<div id="scene"><div id="back"></div><div id="host"></div></div>
+<script type="module">
+  import {mountPack} from '/library/renderer.js';
+  const query = new URLSearchParams(location.search);
+  const host = document.getElementById('host');
+  const back = document.getElementById('back');
+  const art = color => 'data:image/svg+xml,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="270" height="360"><rect width="270" height="360" fill="${color}"/><path d="M0 25H270M0 32H270" stroke="#e8c477"/><circle cx="135" cy="160" r="56" fill="#e8c477"/><text x="135" y="260" fill="white" font-size="22" text-anchor="middle">FIELD NOTES</text></svg>`);
+  window.events = [];
+  let dispose = () => {};
+  const record = event => {
+    window.events.push(event);
+    if (query.get('disposeOn') === event) queueMicrotask(() => dispose());
+  };
+  window.control = {
+    host, back, art, mountInto: mountPack,
+    mount(options = {}) {
+      dispose();
+      window.events.length = 0;
+      dispose = mountPack(host, {
+        artSrc: query.has('broken') ? '/missing.svg' : art('#20363c'),
+        backLayer: back, width: 270, height: 360, packCount: 3,
+        onReady: () => record('ready'), onInteract: () => record('interact'),
+        onRest: () => record('rest'), onTorn: () => record('torn'),
+        onComplete: () => record('complete'), ...options,
+      });
+    },
+    dispose() { dispose(); },
+    preview() { dispose.setBodyArtwork(art('#68334d')); },
+  };
+  window.control.mount();
+</script>
+</html>

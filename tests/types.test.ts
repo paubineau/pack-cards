@@ -4,11 +4,17 @@ import {
   createExportCard, drawExportMaterial, drawExportStock,
   type AppearanceSettings, type ResolvedAppearance, type Artwork, type PackCardsConfig
 } from 'pack-cards';
-import {normalizeRecapProfile, recapProfileChoices, resolveRecapProfile} from 'pack-cards/appearance';
+import {normalizeRecapProfile, recapProfileChoices, resolveRecapProfile,
+  normalizeAppearance as normalizeFromModule, resolveAppearance as resolveFromModule,
+  resolveAppearances as resolveManyFromModule, appearanceDefaults as defaultsFromModule,
+  appearanceChoices as choicesFromModule} from 'pack-cards/appearance';
 import {createPackCards as createPresentation} from 'pack-cards/presentation';
-import {recapExportCard} from 'pack-cards/export-material';
+import {recapExportCard, createExportCard as exportFromModule,
+  drawExportStock as stockFromModule, drawExportMaterial as materialFromModule} from 'pack-cards/export-material';
 import {mountPack as mountRendererPack} from 'pack-cards/renderer';
 import 'pack-cards/styles.css';
+import 'pack-cards/base.css';
+import 'pack-cards/theme.css';
 import {createCardPile} from 'pack-cards/collection';
 import {createAppearanceEditor} from 'pack-cards/editor';
 import {snapshotCard,createCardDragPreview} from 'pack-cards/snapshots';
@@ -21,6 +27,10 @@ settings.card.pattern = ['dots', 'facets'];
 settings.rarities.rare.foil = 'holographic';
 const artwork: Artwork = {accent: '#abcdef', tint: '#112233'};
 const appearance: ResolvedAppearance = resolveAppearance(settings, artwork, 'card', 'rare');
+const moduleSettings: AppearanceSettings = normalizeFromModule(defaultsFromModule);
+const moduleAppearance: ResolvedAppearance = resolveFromModule(moduleSettings, artwork, 'card');
+resolveManyFromModule(moduleSettings, artwork, [{identity: 'card'}]);
+void moduleAppearance; void choicesFromModule;
 const profile = normalizeRecapProfile({stock: 'paper'});
 const choices: ('paper' | 'metal')[] = recapProfileChoices(profile, 'stock');
 resolveRecapProfile(settings, profile, 'card', choices => choices[0]);
@@ -80,6 +90,9 @@ const frame = createExportCard(canvas, artwork, {appearance, drawBadge(ctx, x, y
 drawExportStock(frame.ctx, artwork, appearance);
 drawExportMaterial(frame.ctx, artwork, appearance);
 recapExportCard(canvas);
+const moduleFrame = exportFromModule(canvas, artwork, {appearance});
+stockFromModule(moduleFrame.ctx, artwork, appearance);
+materialFromModule(moduleFrame.ctx, artwork, appearance);
 const renderer = mountRendererPack(host, {artSrc: '/pack.svg', width: 300, height: 400, glowTier: 'gold'});
 renderer.setBodyArtwork('/preview.svg');
 renderer();

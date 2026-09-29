@@ -15,8 +15,9 @@ class EventTarget {
 
 // Only the DOM operations used by pack/deck lifecycles are represented here.
 // This fixture tests events and ownership; browser layout is checked separately.
-export function installDOM(t, { reduced = false } = {}) {
+export function installDOM(t, { reduced = false, installGlobals = true } = {}) {
   const timers = new Map();
+  const frames = new Map();
   const media = new Map();
   const cleanup = [];
   let timerId = 0;
@@ -103,6 +104,10 @@ export function installDOM(t, { reduced = false } = {}) {
     navigator: { maxTouchPoints: 0 },
     getSelection: () => ({ isCollapsed: true }),
     getComputedStyle: node => ({ transform: node.style.transform || 'none', getPropertyValue: key => node.style.getPropertyValue(key) }),
+    setTimeout: (callback, delay) => { timers.set(++timerId, { callback, delay }); return timerId; },
+    clearTimeout: id => timers.delete(id),
+    requestAnimationFrame: callback => { frames.set(++timerId, callback); return timerId; },
+    cancelAnimationFrame: id => frames.delete(id),
     matchMedia(query) {
       if (!media.has(query)) media.set(query, Object.assign(new EventTarget(), {
         matches: query.includes('no-preference') ? !reduced : query.includes(': reduce)') ? reduced : false
@@ -110,26 +115,26 @@ export function installDOM(t, { reduced = false } = {}) {
       return media.get(query);
     }
   });
+  document.defaultView = window;
   const globals = {
     document, window, getComputedStyle: window.getComputedStyle,
-    setTimeout: (callback, delay) => { timers.set(++timerId, { callback, delay }); return timerId; },
-    clearTimeout: id => timers.delete(id)
+    setTimeout: window.setTimeout, clearTimeout: window.clearTimeout
   };
   const previous = new Map(Object.keys(globals).map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)]));
-  for (const [key, value] of Object.entries(globals)) Object.defineProperty(globalThis, key, { configurable: true, writable: true, value });
+  if (installGlobals) for (const [key, value] of Object.entries(globals)) Object.defineProperty(globalThis, key, { configurable: true, writable: true, value });
   t.after(async () => {
     await setImmediate();
     try {
       for (const dispose of cleanup) dispose();
     } finally {
-      for (const [key, descriptor] of previous) {
+      if (installGlobals) for (const [key, descriptor] of previous) {
         if (descriptor) Object.defineProperty(globalThis, key, descriptor);
         else delete globalThis[key];
       }
     }
   });
   return {
-    document, window, timers, media, settle: setImmediate,
+    document, window, timers, frames, media, settle: setImmediate,
     cleanup(dispose) { cleanup.push(dispose); },
     host() { const host = new Node('div'); document.body.append(host); return host; },
     runTimers() {
