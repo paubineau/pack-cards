@@ -5,7 +5,7 @@ ordinary DOM elements for your card faces; it adds the wrapper, reveal animation
 materials, and interaction.
 
 <p align="center">
-  <img src="media/showcase.gif" width="432" alt="Pack Cards: a pack opens, cards catch the light, and the legendary Sun joins the collection.">
+  <img src="media/showcase.gif?v=2" width="432" alt="Pack Cards: a pack opens, cards catch the light, and the legendary Sun joins the collection.">
 </p>
 
 <p align="center">
