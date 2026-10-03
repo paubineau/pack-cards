@@ -190,16 +190,15 @@ export function mountRecapPack(context,container,r,channel,total,artwork,onOpen,
       if (!active() || pack.disabled) return;
       pack.replaceChildren(image); pack.className+=' recap-pack-illustrated';
       stack.style.opacity='';
-      let updateNativeArtwork=null;
+      let previewImage=null;
       if (options.description) {
         const previewSrc=recapPackArtwork(r,channel,artwork,hideRecipient,title,options.description);
         let loaded=false,hovered=false,focused=stack.contains(document.activeElement) && document.activeElement.matches(':focus-visible'),dismissed=false;
         const update=() => {
           if (!active()) return;
           const preview=loaded && !dismissed && !pack.disabled && !scene.classList.contains('recap-pack-torn') && (hovered || focused);
-          const src=preview ? previewSrc : artSrc;
-          if (image.src!==src) image.src=src;
-          updateNativeArtwork?.(src);
+          stack.classList.toggle('recap-pack-preview',preview);
+          stack.classList.toggle('recap-pack-preview-dismissed',dismissed);
         };
         dismissPreview=()=>{dismissed=true;update();};
         const listeners=[
@@ -213,8 +212,10 @@ export function mountRecapPack(context,container,r,channel,total,artwork,onOpen,
         ];
         for (const [type,handler,capture] of listeners) stack.addEventListener(type,handler,capture);
         disposePreview=()=>{for (const [type,handler,capture] of listeners) stack.removeEventListener(type,handler,capture);};
-        // Decode once before swapping the print, keeping the foil visible on the first hover.
-        const previewImage=el('img'); previewImage.src=previewSrc;
+        // Layer the decoded print over the original so hover can fade in and out.
+        previewImage=el('img',null,'recap-pack-description'); previewImage.src=previewSrc;
+        previewImage.alt=''; previewImage.draggable=false;
+        pack.append(previewImage);
         previewImage.decode().then(()=>{loaded=true;update();}).catch(()=>{});
       }
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -229,7 +230,6 @@ export function mountRecapPack(context,container,r,channel,total,artwork,onOpen,
       const cancelResize=() => { if (resizeTimer) window.clearTimeout(resizeTimer); resizeTimer=0; };
       rendererDispose=() => {
         version++; observer?.disconnect(); cancelResize();
-        updateNativeArtwork=null;
         const dispose=nativeDispose; nativeDispose=null;
         if (dispose) dispose();
         resumeFoil();
@@ -306,8 +306,7 @@ export function mountRecapPack(context,container,r,channel,total,artwork,onOpen,
             // Leave the renderer callback before disposing its resources.
             timer=window.setTimeout(showDeck,0);
           }});
-        updateNativeArtwork=src=>nativeDispose?.setBodyArtwork?.(src);
-        updateNativeArtwork(image.src);
+        if (previewImage) host.append(previewImage.cloneNode());
       }
       const changed=rect => rect.width>0 && rect.height>0 &&
         (!size || Math.abs(rect.width-size.width)>=1 || Math.abs(rect.height-size.height)>=1);

@@ -119,6 +119,7 @@ function reset() {
   elements['pile-caption'].textContent = 'Your viewed cards will collect here.';
   const options = {
     label: 'Field notes', recipient: 'Explorer', title: 'FIELD NOTES', count: cards.length,
+    description: 'Un lien pour ton chat. Chaque viewer découvre sa Personnal edition et la partage.',
     packCount: Number(elements['pack-count'].value), artwork, appearance: settings,
     mystery: elements.mystery.checked, autoRevealFirst: elements.reveal.value === 'auto',
     focus: false, isActive: () => generation === current,

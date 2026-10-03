@@ -127,6 +127,11 @@
 .recap-pack-enhanced{overflow:visible}
 .recap-pack.recap-pack-illustrated{border:0;border-radius:0;transform:none;background:none;box-shadow:none;filter:drop-shadow(0 22px 22px #0006)}
 .recap-pack-illustrated img{display:block;width:100%;height:100%;object-fit:contain}
+.recap-pack-description{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;opacity:0;transition:opacity 220ms ease-out}
+.recap-pack-preview .recap-pack-description{opacity:1;transition:opacity 320ms ease-in-out 80ms}
+.recap-webgl-pack>.recap-pack-description{clip-path:inset(30% 0 0 0)}
+.recap-pack-preview-dismissed .recap-pack-description{transition:opacity 320ms ease-in-out}
+@media(prefers-reduced-motion:reduce){.recap-pack-description,.recap-pack-preview .recap-pack-description{transition:none}}
 .recap-pack-illustrated::before,.recap-pack-illustrated::after{display:none}
 .recap-webgl-pack{position:absolute;inset:0;z-index:2;rotate:var(--recap-pack-angle,0deg);isolation:isolate;filter:drop-shadow(0 22px 22px #0006)}
 .recap-pack-lining{position:absolute;inset:0;z-index:0;rotate:var(--recap-pack-angle,0deg);isolation:isolate;pointer-events:none}
