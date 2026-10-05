@@ -84,10 +84,18 @@ export function createRecapPackFlight(context,scene,stack,motion,viewport,artwor
       });
       const travel=flight.animate(frames,{duration,easing:'linear',fill:'both'});
       const options={delay:clearAt,duration:duration-clearAt,easing:'cubic-bezier(.3,0,.2,1)',fill:'both'};
-      animations.push(travel,turn.animate([{transform:'rotateY(180deg)'},{transform:'rotateY(0deg)'}],options),
-        motion.animate([{transform:pose},{transform:'none'}],options),
+      animations.push(travel,motion.animate([{transform:pose},{transform:'none'}],options),
         ...backs.map((back,index)=>back.animate([{transform:'none'},{transform:spread[index]}],options)));
-      travel.onfinish=dispose;
+      if (!backs.length) {
+        animations.push(turn.animate([{transform:'rotateY(180deg)'},{transform:'rotateY(0deg)'}],options));
+        travel.onfinish=dispose;
+        return;
+      }
+      // Share the movement's timeline so the stack flips as soon as it arrives.
+      const flip=turn.animate([{transform:'rotateY(180deg)'},{transform:'rotateY(0deg)'}],
+        {delay:duration,duration:800,easing:'cubic-bezier(.2,.65,.3,1)',fill:'both'});
+      animations.push(flip);
+      flip.onfinish=dispose;
     });
     return {cancel:dispose};
   }}};

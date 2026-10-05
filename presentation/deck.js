@@ -93,18 +93,20 @@ export function mountRecapCardDeck(context,card,channel,remaining,artwork,{backw
   else if (arrival?.width>0 && arrival.height>0 && typeof stage.animate==='function' &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     // Measure after the caller has mounted and positioned the real deck. Move its
-    // outer stage once, leaving the shared tilt and reveal flip independent.
-    stage.style.opacity='0'; turn.style.animationDelay='320ms';
+    // outer stage once. Hold a stack's reveal until arrival; keep single-card timing.
+    stage.style.opacity='0';
+    if (remaining>0) { turn.classList.add('recap-turn-arriving'); turn.style.animationPlayState='paused'; }
+    else turn.style.animationDelay='320ms';
     arrivalFrame=window.requestAnimationFrame(()=>{
       arrivalFrame=0; stage.style.opacity='';
       const target=deck.getBoundingClientRect(),frame=stage.getBoundingClientRect();
       if (!stage.isConnected || !target.width || !target.height || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        turn.style.animationDelay=''; return;
+        turn.style.animationPlayState=''; turn.style.animationDelay=''; return;
       }
       // A caller may keep a background deck scaled down. Preserve that placement
       // rather than overriding its transform for an opening in the background.
       const transform=window.getComputedStyle(stage).transform;
-      if (transform && transform!=='none') { turn.style.animationDelay=''; return; }
+      if (transform && transform!=='none') { turn.style.animationPlayState=''; turn.style.animationDelay=''; return; }
       stage.style.transformOrigin=`${target.left+target.width/2-frame.left}px ${target.top+target.height/2-frame.top}px`;
       const x=arrival.left+arrival.width/2-target.left-target.width/2,y=arrival.top+arrival.height/2-target.top-target.height/2;
       const scale=appearance.pack_zoom ? ` scale(${arrival.width/target.width},${arrival.height/target.height})` : '';
@@ -112,20 +114,23 @@ export function mountRecapCardDeck(context,card,channel,remaining,artwork,{backw
         {transform:`translate(${x}px,${y}px)${scale}`},
         {transform:'none'}
       ],{duration:320,easing:'cubic-bezier(.2,.7,.3,1)',fill:'backwards'});
+      arrivalMotion.onfinish=()=>{turn.style.animationPlayState='';};
     });
   }
   const disposeFoil=()=>{
     disposeMaterial();
     arrivalPreference.removeEventListener?.('change',arrivalPreferenceChanged);
     if (arrivalFrame) window.cancelAnimationFrame(arrivalFrame);
+    if (arrivalMotion?.onfinish) arrivalMotion.onfinish=null;
     arrivalFrame=0; arrivalMotion?.cancel(); arrivalMotion=null;
-    stage.style.opacity=''; stage.style.transformOrigin=''; turn.style.animationDelay='';
+    stage.style.opacity=''; stage.style.transformOrigin=''; turn.style.animationPlayState=''; turn.style.animationDelay='';
   };
   const cancelArrival=()=>{
     arrivalPreference.removeEventListener?.('change',arrivalPreferenceChanged);
     if (arrivalFrame) window.cancelAnimationFrame(arrivalFrame);
+    if (arrivalMotion?.onfinish) arrivalMotion.onfinish=null;
     arrivalFrame=0; arrivalMotion?.cancel(); arrivalMotion=null;
-    stage.style.opacity=''; stage.style.transformOrigin=''; turn.style.animationDelay='';
+    stage.style.opacity=''; stage.style.transformOrigin=''; turn.style.animationPlayState=''; turn.style.animationDelay='';
   };
   function arrivalPreferenceChanged() { if (arrivalPreference.matches) cancelArrival(); }
   if (arrivalFrame || arrivalMotion) arrivalPreference.addEventListener?.('change',arrivalPreferenceChanged);
